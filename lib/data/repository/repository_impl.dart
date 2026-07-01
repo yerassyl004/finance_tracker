@@ -34,7 +34,8 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, List<Transaction>>> loadTransactions(
-      DateTime selectedDate) async {
+    DateTime selectedDate,
+  ) async {
     try {
       final transactions = await _transactionDao.getTransactions(selectedDate);
       return Right(transactions);
@@ -93,7 +94,8 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, List<Category>>> loadCategoryData(
-      CategoryType type) async {
+    CategoryType type,
+  ) async {
     final accounts = await _categorytDao.loadCategories(type.index);
     if (accounts.isEmpty) {
       List<Category> categories = [];
@@ -122,20 +124,33 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> createTransaction(
-      Transaction transaction) async {
+    Transaction transaction,
+  ) async {
     try {
       switch (transaction.typeSpending) {
         case TypeSpending.expense:
-          await _accountDao.updateAccount(transaction.account!
-              .copyWith(cash: transaction.account!.cash - transaction.cash));
+          await _accountDao.updateAccount(
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash - transaction.cash,
+            ),
+          );
         case TypeSpending.income:
-          await _accountDao.updateAccount(transaction.account!
-              .copyWith(cash: transaction.account!.cash + transaction.cash));
+          await _accountDao.updateAccount(
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash + transaction.cash,
+            ),
+          );
         case TypeSpending.transfer:
-          await _accountDao.updateAccount(transaction.account!
-              .copyWith(cash: transaction.account!.cash - transaction.cash));
-          await _accountDao.updateAccount(transaction.destination!.copyWith(
-              cash: transaction.destination!.cash + transaction.cash));
+          await _accountDao.updateAccount(
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash - transaction.cash,
+            ),
+          );
+          await _accountDao.updateAccount(
+            transaction.destination!.copyWith(
+              cash: transaction.destination!.cash + transaction.cash,
+            ),
+          );
       }
       await _transactionDao.insertTransaction(transaction);
       return Right('Transaction created successfully');
@@ -146,29 +161,34 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, String>> updateTransaction(
-      Transaction transaction) async {
+    Transaction transaction,
+  ) async {
     try {
       switch (transaction.typeSpending) {
         case TypeSpending.expense:
           await _accountDao.updateAccount(
-            transaction.account!
-                .copyWith(cash: transaction.account!.cash - transaction.cash),
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash - transaction.cash,
+            ),
           );
           break;
         case TypeSpending.income:
           await _accountDao.updateAccount(
-            transaction.account!
-                .copyWith(cash: transaction.account!.cash + transaction.cash),
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash + transaction.cash,
+            ),
           );
           break;
         case TypeSpending.transfer:
           await _accountDao.updateAccount(
-            transaction.account!
-                .copyWith(cash: transaction.account!.cash - transaction.cash),
+            transaction.account!.copyWith(
+              cash: transaction.account!.cash - transaction.cash,
+            ),
           );
           await _accountDao.updateAccount(
             transaction.destination!.copyWith(
-                cash: transaction.destination!.cash + transaction.cash),
+              cash: transaction.destination!.cash + transaction.cash,
+            ),
           );
           break;
       }
@@ -212,7 +232,8 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, List<Segment>>> getSegmentPercentage(
-      List<Transaction> transactions) async {
+    List<Transaction> transactions,
+  ) async {
     final Map<String, double> categoryTotals = {};
     double totalAmount = 0.0;
 
@@ -258,7 +279,8 @@ class RepositoryImpl extends Repository {
 
   @override
   Future<Either<Failure, List<Analysis>>> getExpensePercentItem(
-      List<Transaction> transactions) async {
+    List<Transaction> transactions,
+  ) async {
     try {
       final Map<String, Analysis> analysisMap = {};
 
@@ -266,15 +288,16 @@ class RepositoryImpl extends Repository {
         final category = transaction.category;
         if (category != null) {
           analysisMap
-              .putIfAbsent(
-                category.title,
-                () => Analysis(
-                  category: category,
-                  cash: 0.0,
-                  typeSpending: transaction.typeSpending,
-                ),
-              )
-              .cash += transaction.cash;
+                  .putIfAbsent(
+                    category.title,
+                    () => Analysis(
+                      category: category,
+                      cash: 0.0,
+                      typeSpending: transaction.typeSpending,
+                    ),
+                  )
+                  .cash +=
+              transaction.cash;
         }
       }
 
@@ -286,30 +309,86 @@ class RepositoryImpl extends Repository {
       return Left(Failure(-1, 'Error calculating expense percentages: $e'));
     }
   }
-  
+
   @override
-  Future<Either<Failure, List<Transaction>>> loadTransactionsBySpending(DateTime selectedDate, TypeSpending typeSpending) async {
+  Future<Either<Failure, List<Transaction>>> loadTransactionsBySpending(
+    DateTime selectedDate,
+    TypeSpending typeSpending,
+  ) async {
     try {
-      final transactions = await _transactionDao.getTransactionsBySpending(selectedDate, typeSpending);
+      final transactions = await _transactionDao.getTransactionsBySpending(
+        selectedDate,
+        typeSpending,
+      );
       return Right(transactions);
     } catch (e) {
       return Left(Failure(-1, AppStrings.unknownError));
     }
   }
-  
+
   @override
-  Future<Either<Failure, List<Transaction>>> loadTransactionsByCategory(DateTime selectedDate, Category category) async {
+  Future<Either<Failure, List<Transaction>>> loadTransactionsByCategory(
+    DateTime selectedDate,
+    Category category,
+  ) async {
     try {
-      final transactions = await _transactionDao.getTransactionsByCategory(selectedDate, category);
+      final transactions = await _transactionDao.getTransactionsByCategory(
+        selectedDate,
+        category,
+      );
       return Right(transactions);
     } catch (e) {
       return Left(Failure(-1, AppStrings.unknownError));
     }
   }
-  
+
   @override
-  Future<Either<Failure, String>> deleteTransaction(Transaction transaction) async {
+  Future<Either<Failure, String>> deleteTransaction(
+    Transaction transaction,
+  ) async {
     try {
+      // Reverse the effect this transaction had on the account balance(s),
+      // reading the current balance so deletion restores the funds.
+      switch (transaction.typeSpending) {
+        case TypeSpending.expense:
+          if (transaction.account != null) {
+            final account = await _accountDao.getAccountById(
+              transaction.account!.id,
+            );
+            await _accountDao.updateAccount(
+              account.copyWith(cash: account.cash + transaction.cash),
+            );
+          }
+          break;
+        case TypeSpending.income:
+          if (transaction.account != null) {
+            final account = await _accountDao.getAccountById(
+              transaction.account!.id,
+            );
+            await _accountDao.updateAccount(
+              account.copyWith(cash: account.cash - transaction.cash),
+            );
+          }
+          break;
+        case TypeSpending.transfer:
+          if (transaction.account != null) {
+            final from = await _accountDao.getAccountById(
+              transaction.account!.id,
+            );
+            await _accountDao.updateAccount(
+              from.copyWith(cash: from.cash + transaction.cash),
+            );
+          }
+          if (transaction.destination != null) {
+            final to = await _accountDao.getAccountById(
+              transaction.destination!.id,
+            );
+            await _accountDao.updateAccount(
+              to.copyWith(cash: to.cash - transaction.cash),
+            );
+          }
+          break;
+      }
       await _transactionDao.deleteTransaction(transaction.id);
       return Right('Transaction deleted successfully');
     } catch (e) {

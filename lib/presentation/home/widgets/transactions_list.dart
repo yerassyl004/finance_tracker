@@ -1,5 +1,5 @@
 import 'package:finance_app/domain/models/transaction.dart';
-import 'package:finance_app/presentation/home/ui/widgets/transaction_widget.dart';
+import 'package:finance_app/presentation/home/widgets/transaction_widget.dart';
 import 'package:finance_app/presentation/resourses/styles_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

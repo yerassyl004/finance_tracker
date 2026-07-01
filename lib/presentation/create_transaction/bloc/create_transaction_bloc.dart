@@ -54,45 +54,55 @@ class CreateTransactionBloc
   final Transaction? transaction;
 
   CreateTransactionBloc(
-      this.updateTransactionUsecase,
-      this.createTransactionUsecase,
-      this.loadAccountUseCase,
-      this.loadCategoryUsecase,
-      this.transaction)
-      : super(const CreateTransactionState.initial(
-            CreateTransactionData.init())) {
+    this.updateTransactionUsecase,
+    this.createTransactionUsecase,
+    this.loadAccountUseCase,
+    this.loadCategoryUsecase,
+    this.transaction,
+  ) : super(
+        const CreateTransactionState.initial(CreateTransactionData.init()),
+      ) {
     on<InitialTransactionEvent>(_init);
     on<EditTransactionEvent>(_edit);
     on<SaveTransactionEvent>(_save);
   }
 
-  Future<void> _init(InitialTransactionEvent event,
-      Emitter<CreateTransactionState> emit) async {
+  Future<void> _init(
+    InitialTransactionEvent event,
+    Emitter<CreateTransactionState> emit,
+  ) async {
     List<Account> accountList = await _onLoadAccounts();
-    List<Category> expenseCategoryList =
-        await _onLoadCategory(CategoryType.expense);
-    List<Category> incomeCategoryList =
-        await _onLoadCategory(CategoryType.income);
+    List<Category> expenseCategoryList = await _onLoadCategory(
+      CategoryType.expense,
+    );
+    List<Category> incomeCategoryList = await _onLoadCategory(
+      CategoryType.income,
+    );
     debugPrint('transaction:::: ${transaction?.toJson()}');
     final newData = event.data.copyWith(
-        accounts: accountList,
-        fromAccount: transaction?.account,
-        toAccount: transaction?.destination,
-        category: transaction?.category,
-        expenseCategories: expenseCategoryList,
-        incomeCategories: incomeCategoryList,
-        transaction: transaction,
-        selectedType: transaction?.typeSpending ?? TypeSpending.expense);
+      accounts: accountList,
+      fromAccount: transaction?.account,
+      toAccount: transaction?.destination,
+      category: transaction?.category,
+      expenseCategories: expenseCategoryList,
+      incomeCategories: incomeCategoryList,
+      transaction: transaction,
+      selectedType: transaction?.typeSpending ?? TypeSpending.expense,
+    );
     add(CreateTransactionEvent.edit(data: newData));
   }
 
   Future<void> _edit(
-      EditTransactionEvent event, Emitter<CreateTransactionState> emit) async {
+    EditTransactionEvent event,
+    Emitter<CreateTransactionState> emit,
+  ) async {
     emit(CreateTransactionState.editing(event.data));
   }
 
   Future<void> _save(
-      SaveTransactionEvent event, Emitter<CreateTransactionState> emit) async {
+    SaveTransactionEvent event,
+    Emitter<CreateTransactionState> emit,
+  ) async {
     if (event.data.transaction?.account != null &&
         (event.data.transaction?.category != null ||
             event.data.transaction?.destination != null)) {
@@ -106,29 +116,36 @@ class CreateTransactionBloc
       if (transaction == null) {
         final result = await createTransactionUsecase.execute(transactionData);
         result.fold(
-            (failure) => emit(CreateTransactionState.editing(
-                event.data.copyWith(errorMessage: 'Error'))),
-            (success) => emit(CreateTransactionState.success(event.data)));
+          (failure) => emit(
+            CreateTransactionState.editing(
+              event.data.copyWith(errorMessage: 'Error'),
+            ),
+          ),
+          (success) => emit(CreateTransactionState.success(event.data)),
+        );
       } else {
         final result = await updateTransactionUsecase.execute(transactionData);
         result.fold(
-            (failure) => emit(CreateTransactionState.editing(
-                event.data.copyWith(errorMessage: 'Error'))),
-            (success) => emit(CreateTransactionState.success(event.data)));
-        updateTransactionUsecase.execute(transactionData);
+          (failure) => emit(
+            CreateTransactionState.editing(
+              event.data.copyWith(errorMessage: 'Error'),
+            ),
+          ),
+          (success) => emit(CreateTransactionState.success(event.data)),
+        );
       }
     } else {
-      emit(CreateTransactionState.editing(
-          event.data.copyWith(errorMessage: 'Empty')));
+      emit(
+        CreateTransactionState.editing(
+          event.data.copyWith(errorMessage: 'Empty'),
+        ),
+      );
     }
   }
 
   Future<List<Account>> _onLoadAccounts() async {
     final result = await loadAccountUseCase.execute(null);
-    return result.fold(
-      (failure) => [],
-      (accounts) => accounts,
-    );
+    return result.fold((failure) => [], (accounts) => accounts);
   }
 
   Future<List<Category>> _onLoadCategory(CategoryType type) async {
