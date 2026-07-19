@@ -25,6 +25,12 @@ class FinancialAnalysisArguments {
   /// button). Not part of the fingerprint.
   final bool forceRefresh;
 
+  /// When true, a cache miss triggers a fresh Gemini call; when false, a miss
+  /// simply returns whatever is cached (or nothing), spending no tokens. The
+  /// presentation layer sets this to true only for the current month, so
+  /// browsing past months never auto-generates.
+  final bool autoGenerateOnMiss;
+
   const FinancialAnalysisArguments({
     required this.profile,
     required this.totalExpense,
@@ -32,7 +38,15 @@ class FinancialAnalysisArguments {
     required this.month,
     this.categoryBudgets = const [],
     this.forceRefresh = false,
+    this.autoGenerateOnMiss = true,
   });
+
+  /// Stable per-month cache key (e.g. `2026-07`). One cached analysis is kept
+  /// per month so switching months reuses each month's result instead of
+  /// evicting a single shared slot.
+  String get monthKey =>
+      '${month.year.toString().padLeft(4, '0')}-'
+      '${month.month.toString().padLeft(2, '0')}';
 
   /// A stable hash of every input the analysis depends on. Two argument sets
   /// with the same fingerprint would produce equivalent advice, so a cached
@@ -82,8 +96,6 @@ class FinancialAnalysisArguments {
 /// A cached [FinancialAnalysis] together with the [fingerprint] of the inputs
 /// it was generated from and when it was produced.
 class CachedFinancialAnalysis {
-  static const String primaryId = 'primary';
-
   final FinancialAnalysis analysis;
   final String fingerprint;
   final DateTime updatedAt;

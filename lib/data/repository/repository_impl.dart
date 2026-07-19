@@ -27,11 +27,6 @@ class RepositoryImpl extends Repository {
   final GeminiRemoteDataSource _geminiRemoteDataSource;
   final FinancialAnalysisDao _financialAnalysisDao;
 
-  /// A cached analysis is refreshed after this long even if the inputs are
-  /// unchanged, so advice doesn't go stale forever. Data changes still refresh
-  /// immediately via the fingerprint.
-  static const Duration _analysisMaxAge = Duration(days: 7);
-
   RepositoryImpl(
     this._categorytDao,
     this._accountDao,
@@ -439,31 +434,36 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, FinancialAnalysis>> getFinancialAnalysis(
+  Future<Either<Failure, FinancialAnalysis?>> getFinancialAnalysis(
     FinancialAnalysisArguments args,
   ) async {
     final fingerprint = args.fingerprint;
+    final monthKey = args.monthKey;
 
-    // Read the cache first; a matching fingerprint means the inputs are
-    // unchanged, so we can skip the Gemini call entirely (token optimisation).
+    // Read this month's cached analysis first. A matching fingerprint means the
+    // inputs are unchanged, so we can reuse it and skip Gemini entirely.
     CachedFinancialAnalysis? cached;
     try {
-      cached = await _financialAnalysisDao.get();
+      cached = await _financialAnalysisDao.getByMonth(monthKey);
     } catch (_) {
       cached = null;
     }
 
-    if (!args.forceRefresh &&
-        cached != null &&
-        cached.fingerprint == fingerprint &&
-        DateTime.now().difference(cached.updatedAt) < _analysisMaxAge) {
+    final hasFreshCache = cached != null && cached.fingerprint == fingerprint;
+    if (!args.forceRefresh && hasFreshCache) {
       return Right(cached.analysis);
+    }
+
+    // Passive load (e.g. browsing a past month) with no fresh cache: never
+    // spend tokens automatically. Show whatever is cached, or nothing (idle).
+    if (!args.forceRefresh && !args.autoGenerateOnMiss) {
+      return Right(cached?.analysis);
     }
 
     try {
       final analysis = await _geminiRemoteDataSource.getAnalysis(args);
       try {
-        await _financialAnalysisDao.save(analysis, fingerprint);
+        await _financialAnalysisDao.save(monthKey, analysis, fingerprint);
       } catch (_) {
         // A failed cache write shouldn't fail the request.
       }

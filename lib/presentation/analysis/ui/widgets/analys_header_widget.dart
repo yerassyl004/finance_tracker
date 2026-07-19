@@ -1,6 +1,6 @@
 import 'package:finance_app/presentation/analysis/ui/widgets/analys_type_spending_widget.dart';
+import 'package:finance_app/presentation/analysis/ui/widgets/analysis_theme.dart';
 import 'package:finance_app/domain/models/type_spending.dart';
-import 'package:finance_app/presentation/resourses/styles_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,12 +10,13 @@ class AnalysHeaderWidget extends StatelessWidget {
   final DateTime currentDate;
   final TypeSpending selectedType;
 
-  const AnalysHeaderWidget(
-      {super.key,
-      required this.onDateChanged,
-      required this.typeSpending,
-      required this.currentDate,
-      required this.selectedType});
+  const AnalysHeaderWidget({
+    super.key,
+    required this.onDateChanged,
+    required this.typeSpending,
+    required this.currentDate,
+    required this.selectedType,
+  });
 
   void _previousMonth() {
     onDateChanged(DateTime(currentDate.year, currentDate.month - 1));
@@ -31,65 +32,98 @@ class AnalysHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = MediaQuery.of(context).padding;
-    String monthYear = DateFormat('MMMM, yyyy').format(currentDate);
+    final monthYear = DateFormat('MMMM yyyy').format(currentDate);
 
     return Container(
-      padding: EdgeInsets.only(top: padding.top),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.md,
+      ),
+      decoration: const BoxDecoration(
+        color: AnalysisTokens.background,
+        border: Border(bottom: BorderSide(color: AnalysisTokens.border)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Month switcher.
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: _previousMonth,
-                icon: Icon(Icons.arrow_back_ios),
+              _NavButton(
+                icon: Icons.chevron_left,
+                tooltip: 'Previous month',
+                onTap: _previousMonth,
               ),
               SizedBox(
-                width: 170,
+                width: 190,
                 child: Text(
                   monthYear,
-                  style: AppTextStyle.body16Medium(),
                   textAlign: TextAlign.center,
+                  style: AnalysisTokens.heading(),
                 ),
               ),
-              IconButton(
-                onPressed: _nextMonth,
-                icon: Icon(Icons.arrow_forward_ios),
+              _NavButton(
+                icon: Icons.chevron_right,
+                tooltip: 'Next month',
+                onTap: _nextMonth,
               ),
             ],
           ),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnalysTypeSpendingWidget(
+          const SizedBox(height: AppSpacing.md),
+          // Expense / Income segmented control.
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.xs),
+            decoration: BoxDecoration(
+              color: AnalysisTokens.track,
+              borderRadius: BorderRadius.circular(AnalysisTokens.radiusPill),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnalysTypeSpendingWidget(
                   typeSpending: TypeSpending.expense,
-                  isSelected: TypeSpending.expense == selectedType,
-                  onTap: _onSelectedType),
-              SizedBox(width: 42),
-              AnalysTypeSpendingWidget(
+                  isSelected: selectedType == TypeSpending.expense,
+                  onTap: _onSelectedType,
+                ),
+                AnalysTypeSpendingWidget(
                   typeSpending: TypeSpending.income,
-                  isSelected: TypeSpending.income == typeSpending,
-                  onTap: _onSelectedType),
-            ],
+                  isSelected: selectedType == TypeSpending.income,
+                  onTap: _onSelectedType,
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 8),
         ],
       ),
+    );
+  }
+}
+
+/// Subtle, touch-friendly circular icon button for month navigation.
+class _NavButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _NavButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onTap,
+      tooltip: tooltip,
+      iconSize: 22,
+      color: AnalysisTokens.textSecondary,
+      splashRadius: 22,
+      constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+      icon: Icon(icon),
     );
   }
 }

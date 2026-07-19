@@ -84,8 +84,12 @@ void main() {
       mockTransactionDao.getTransactions(any),
     ).thenAnswer((_) async => mockTransactions);
     // Default: no cache and a no-op save, so analysis tests hit Gemini.
-    when(mockFinancialAnalysisDao.get()).thenAnswer((_) async => null);
-    when(mockFinancialAnalysisDao.save(any, any)).thenAnswer((_) async => 1);
+    when(
+      mockFinancialAnalysisDao.getByMonth(any),
+    ).thenAnswer((_) async => null);
+    when(
+      mockFinancialAnalysisDao.save(any, any, any),
+    ).thenAnswer((_) async => 1);
   });
 
   group('expenseAmount', () {
@@ -164,10 +168,14 @@ void main() {
       expect(result.isRight(), true);
       result.fold(
         (_) => fail('Should not return failure'),
-        (value) => expect(value.summary, 'ok'),
+        (value) => expect(value!.summary, 'ok'),
       );
       verify(
-        mockFinancialAnalysisDao.save(analysis, args.fingerprint),
+        mockFinancialAnalysisDao.save(
+          args.monthKey,
+          analysis,
+          args.fingerprint,
+        ),
       ).called(1);
     });
 
@@ -178,7 +186,7 @@ void main() {
           summary: 'cached',
           recommendations: [],
         );
-        when(mockFinancialAnalysisDao.get()).thenAnswer(
+        when(mockFinancialAnalysisDao.getByMonth(any)).thenAnswer(
           (_) async => CachedFinancialAnalysis(
             analysis: cachedAnalysis,
             fingerprint: args.fingerprint,
@@ -191,7 +199,7 @@ void main() {
         expect(result.isRight(), true);
         result.fold(
           (_) => fail('Should not return failure'),
-          (value) => expect(value.summary, 'cached'),
+          (value) => expect(value!.summary, 'cached'),
         );
         verifyNever(mockGeminiRemoteDataSource.getAnalysis(any));
       },
@@ -208,7 +216,7 @@ void main() {
           summary: 'fresh',
           recommendations: [],
         );
-        when(mockFinancialAnalysisDao.get()).thenAnswer(
+        when(mockFinancialAnalysisDao.getByMonth(any)).thenAnswer(
           (_) async => CachedFinancialAnalysis(
             analysis: cachedAnalysis,
             fingerprint: args.fingerprint,
@@ -231,7 +239,7 @@ void main() {
 
         result.fold(
           (_) => fail('Should not return failure'),
-          (value) => expect(value.summary, 'fresh'),
+          (value) => expect(value!.summary, 'fresh'),
         );
         verify(mockGeminiRemoteDataSource.getAnalysis(any)).called(1);
       },
@@ -242,7 +250,7 @@ void main() {
         summary: 'stale',
         recommendations: [],
       );
-      when(mockFinancialAnalysisDao.get()).thenAnswer(
+      when(mockFinancialAnalysisDao.getByMonth(any)).thenAnswer(
         (_) async => CachedFinancialAnalysis(
           analysis: cachedAnalysis,
           fingerprint: 'different-fingerprint',
@@ -258,9 +266,33 @@ void main() {
       expect(result.isRight(), true);
       result.fold(
         (_) => fail('Should fall back to cache'),
-        (value) => expect(value.summary, 'stale'),
+        (value) => expect(value!.summary, 'stale'),
       );
     });
+
+    test(
+      'passive load of a past month never calls Gemini (token saving)',
+      () async {
+        // No cache for this month, and generation not requested.
+        final passive = FinancialAnalysisArguments(
+          profile: args.profile,
+          categoryBudgets: args.categoryBudgets,
+          totalExpense: args.totalExpense,
+          totalIncome: args.totalIncome,
+          month: args.month,
+          autoGenerateOnMiss: false,
+        );
+
+        final result = await repository.getFinancialAnalysis(passive);
+
+        expect(result.isRight(), true);
+        result.fold(
+          (_) => fail('Should not return failure'),
+          (value) => expect(value, isNull), // idle, no analysis
+        );
+        verifyNever(mockGeminiRemoteDataSource.getAnalysis(any));
+      },
+    );
 
     test('maps a rate-limit GeminiException to a 429 Failure', () async {
       when(mockGeminiRemoteDataSource.getAnalysis(any)).thenThrow(

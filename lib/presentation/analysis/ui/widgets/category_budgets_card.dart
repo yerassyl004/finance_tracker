@@ -1,6 +1,6 @@
 import 'package:finance_app/domain/models/category_budget_progress.dart';
 import 'package:finance_app/presentation/analysis/bloc/analysis_bloc.dart';
-import 'package:finance_app/presentation/resourses/color_manager.dart';
+import 'package:finance_app/presentation/analysis/ui/widgets/analysis_theme.dart';
 import 'package:finance_app/presentation/resourses/strings_manager.dart';
 import 'package:finance_app/presentation/resourses/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -19,33 +19,37 @@ class CategoryBudgetsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rows = data.categoryBudgets;
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: ColorManager.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return AnalysisCard(
+      padding: rows.isEmpty
+          ? const EdgeInsets.all(AppSpacing.lg)
+          : const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AppStrings.budgetsTitle, style: AppTextStyle.body20Medium()),
-          const SizedBox(height: 12),
+          AnalysisCardHeader(
+            icon: Icons.donut_small_outlined,
+            title: AppStrings.budgetsTitle,
+          ),
+          const SizedBox(height: AppSpacing.sm),
           if (rows.isEmpty)
-            Text(
-              AppStrings.budgetsEmpty,
-              style: AppTextStyle.body14Medium().copyWith(
-                color: ColorManager.grey,
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
+              child: Text(
+                AppStrings.budgetsEmpty,
+                style: AnalysisTokens.bodyMuted(),
               ),
             )
           else
-            ...rows.map(
-              (row) => _CategoryRow(
+            for (final row in rows)
+              _CategoryRow(
                 row: row,
                 onEdit: () => _showEditDialog(context, row),
               ),
-            ),
         ],
       ),
     );
@@ -67,8 +71,11 @@ class CategoryBudgetsCard extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: ColorManager.white,
-              title: Text(row.title, style: AppTextStyle.bold20()),
+              backgroundColor: AnalysisTokens.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AnalysisTokens.radiusLg),
+              ),
+              title: Text(row.title, style: AnalysisTokens.heading()),
               content: TextField(
                 controller: controller,
                 autofocus: true,
@@ -78,6 +85,20 @@ class CategoryBudgetsCard extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: AppStrings.budgetDialogHint,
                   errorText: errorText,
+                  filled: true,
+                  fillColor: AnalysisTokens.background,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(
+                      AnalysisTokens.radiusMd,
+                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(
+                      AnalysisTokens.radiusMd,
+                    ),
+                    borderSide: BorderSide(color: AnalysisTokens.accent),
+                  ),
                 ),
               ),
               actions: [
@@ -85,9 +106,7 @@ class CategoryBudgetsCard extends StatelessWidget {
                   onPressed: () => Navigator.of(dialogContext).pop(),
                   child: Text(
                     AppStrings.cancel,
-                    style: AppTextStyle.body16Medium().copyWith(
-                      color: ColorManager.grey,
-                    ),
+                    style: AnalysisTokens.bodyMuted(),
                   ),
                 ),
                 TextButton(
@@ -104,7 +123,7 @@ class CategoryBudgetsCard extends StatelessWidget {
                   child: Text(
                     AppStrings.save,
                     style: AppTextStyle.bold16().copyWith(
-                      color: ColorManager.primary,
+                      color: AnalysisTokens.accent,
                     ),
                   ),
                 ),
@@ -130,9 +149,9 @@ class _CategoryRow extends StatelessWidget {
   static final NumberFormat _fmt = NumberFormat('#,##0');
 
   Color get _accent {
-    if (!row.hasBudget) return ColorManager.grey;
-    if (row.isOverBudget) return ColorManager.error;
-    return row.ratio <= 0.8 ? Colors.green.shade600 : Colors.orange.shade700;
+    if (!row.hasBudget) return AnalysisTokens.textTertiary;
+    if (row.isOverBudget) return AnalysisTokens.danger;
+    return row.ratio <= 0.8 ? AnalysisTokens.positive : AnalysisTokens.warning;
   }
 
   @override
@@ -140,53 +159,75 @@ class _CategoryRow extends StatelessWidget {
     final accent = _accent;
     return InkWell(
       onTap: onEdit,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AnalysisTokens.radiusMd),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm + 2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/images/${row.icon}.png',
-                  width: 28,
-                  height: 28,
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.category,
-                    color: ColorManager.primary,
-                    size: 28,
+                Container(
+                  width: 34,
+                  height: 34,
+                  padding: const EdgeInsets.all(AppSpacing.xs + 1),
+                  decoration: BoxDecoration(
+                    color: AnalysisTokens.background,
+                    borderRadius: BorderRadius.circular(
+                      AnalysisTokens.radiusMd,
+                    ),
+                  ),
+                  child: Image.asset(
+                    'assets/images/${row.icon}.png',
+                    errorBuilder: (_, __, ___) => Icon(
+                      Icons.category_outlined,
+                      color: AnalysisTokens.accent,
+                      size: 18,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: AppSpacing.sm + 2),
                 Expanded(
-                  child: Text(row.title, style: AppTextStyle.body16Medium()),
+                  child: Text(
+                    row.title,
+                    style: AnalysisTokens.body().copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 _trailing(accent),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: AppSpacing.sm),
             ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: row.hasBudget
-                    ? row.ratio.clamp(0.0, 1.0).toDouble()
-                    : 0.0,
-                minHeight: 7,
-                backgroundColor: ColorManager.lightGrey.withValues(alpha: 0.3),
-                valueColor: AlwaysStoppedAnimation<Color>(accent),
+              borderRadius: BorderRadius.circular(AnalysisTokens.radiusPill),
+              child: TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 450),
+                curve: Curves.easeOut,
+                tween: Tween(
+                  begin: 0,
+                  end: row.hasBudget
+                      ? row.ratio.clamp(0.0, 1.0).toDouble()
+                      : 0.0,
+                ),
+                builder: (context, value, _) => LinearProgressIndicator(
+                  value: value,
+                  minHeight: 6,
+                  backgroundColor: AnalysisTokens.track,
+                  valueColor: AlwaysStoppedAnimation<Color>(accent),
+                ),
               ),
             ),
             if (row.hasBudget) ...[
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.xs + 2),
               Text(
                 row.isOverBudget
                     ? '${_fmt.format(row.spent - row.max)} ${AppStrings.budgetOverBy}'
                     : '${_fmt.format(row.max - row.spent)} ${AppStrings.budgetRemaining}',
-                style: AppTextStyle.body14Medium().copyWith(
+                style: AnalysisTokens.label().copyWith(
                   color: row.isOverBudget
-                      ? ColorManager.error
-                      : ColorManager.grey,
+                      ? AnalysisTokens.danger
+                      : AnalysisTokens.textTertiary,
                 ),
               ),
             ],
@@ -198,32 +239,34 @@ class _CategoryRow extends StatelessWidget {
 
   Widget _trailing(Color accent) {
     if (!row.hasBudget) {
-      return Row(
-        children: [
-          Text(_fmt.format(row.spent), style: AppTextStyle.body16Medium()),
-          const SizedBox(width: 6),
-          Text(
-            AppStrings.budgetSet,
-            style: AppTextStyle.body14Medium().copyWith(
-              color: ColorManager.primary,
-            ),
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm + 2,
+          vertical: AppSpacing.xs,
+        ),
+        decoration: BoxDecoration(
+          color: AnalysisTokens.accentSoft,
+          borderRadius: BorderRadius.circular(AnalysisTokens.radiusPill),
+        ),
+        child: Text(
+          AppStrings.budgetSet,
+          style: AppTextStyle.body14Medium().copyWith(
+            color: AnalysisTokens.accent,
+            fontSize: 12,
           ),
-        ],
+        ),
       );
     }
     final percent = (row.ratio * 100).round();
-    return RichText(
-      textAlign: TextAlign.end,
-      text: TextSpan(
-        style: AppTextStyle.body16Medium(),
-        children: [
-          TextSpan(text: '${_fmt.format(row.spent)} / ${_fmt.format(row.max)}'),
-          TextSpan(
-            text: '  $percent%',
-            style: AppTextStyle.bold16().copyWith(color: accent),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          '${_fmt.format(row.spent)} / ${_fmt.format(row.max)}',
+          style: AnalysisTokens.bodyMuted(),
+        ),
+        Text('$percent%', style: AppTextStyle.bold14().copyWith(color: accent)),
+      ],
     );
   }
 }

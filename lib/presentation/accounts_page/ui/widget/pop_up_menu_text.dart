@@ -1,3 +1,4 @@
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:flutter/material.dart';
 
 class PopUpMenuText extends StatelessWidget {
@@ -6,13 +7,14 @@ class PopUpMenuText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // "Delete" reads in the danger colour; everything else stays neutral ink.
+    final isDestructive = title.toLowerCase() == 'delete';
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: Colors.black
-        ),
+      style: HomeTokens.body().copyWith(
+        fontSize: 15,
+        color: isDestructive ? HomeTokens.danger : HomeTokens.textPrimary,
+      ),
     );
   }
 }

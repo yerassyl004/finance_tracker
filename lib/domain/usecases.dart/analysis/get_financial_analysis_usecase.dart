@@ -9,13 +9,13 @@ import 'package:finance_app/domain/usecases.dart/base_usecase.dart';
 /// Returns typed [Failure]s (offline, rate limit, missing key, etc.) via the
 /// repository so the presentation layer can react without knowing about Gemini.
 class GetFinancialAnalysisUseCase
-    extends BaseUseCase<FinancialAnalysisArguments, FinancialAnalysis> {
+    extends BaseUseCase<FinancialAnalysisArguments, FinancialAnalysis?> {
   final Repository _repository;
 
   GetFinancialAnalysisUseCase(this._repository);
 
   @override
-  Future<Either<Failure, FinancialAnalysis>> execute(
+  Future<Either<Failure, FinancialAnalysis?>> execute(
     FinancialAnalysisArguments input,
   ) {
     return _repository.getFinancialAnalysis(input);

@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS categories (
     }
   }
 
-  /// Cached AI analysis — a single row keyed by [FinancialAnalysisCache.primaryId].
+  /// Cached AI analyses — one row per month (id = month key, e.g. `2026-07`).
   ///
   /// [fingerprint] is a hash of the inputs (profile + spending + month) the
   /// analysis was generated from; comparing it against the current inputs lets

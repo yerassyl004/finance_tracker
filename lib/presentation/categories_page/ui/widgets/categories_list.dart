@@ -1,7 +1,7 @@
 import 'package:finance_app/presentation/categories_page/ui/widgets/categories_widget.dart';
 import 'package:finance_app/domain/models/category.dart';
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:finance_app/presentation/resourses/strings_manager.dart';
-import 'package:finance_app/presentation/resourses/styles_manager.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesList extends StatelessWidget {
@@ -20,50 +20,93 @@ class CategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int totalCount = expenseCategories.length + incomeCategories.length + 2;
+    // Only render a section that actually has categories; the all-empty case is
+    // handled one level up by the page's empty state.
+    final sections = <Widget>[
+      if (expenseCategories.isNotEmpty)
+        _CategorySection(
+          title: AppStrings.expenseCategories,
+          categories: expenseCategories,
+          pushEditCategory: pushEditCategory,
+          updateList: updateList,
+        ),
+      if (incomeCategories.isNotEmpty)
+        _CategorySection(
+          title: AppStrings.incomeCategories,
+          categories: incomeCategories,
+          pushEditCategory: pushEditCategory,
+          updateList: updateList,
+        ),
+    ];
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 16),
-      itemCount: totalCount,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return _buildHeader(AppStrings.expenseCategories);
-        } else if (index > 0 && index <= expenseCategories.length) {
-          return CategoriesWidget(
-            category: expenseCategories[index - 1],
-            categoryDeleted: updateList,
-            categoryEdit: pushEditCategory,
-          );
-        } else if (index == expenseCategories.length + 1) {
-          return _buildHeader(AppStrings.incomeCategories);
-        } else {
-          int incomeIndex = index - expenseCategories.length - 2;
-          return CategoriesWidget(
-            category: incomeCategories[incomeIndex],
-            categoryDeleted: updateList,
-            categoryEdit: pushEditCategory,
-          );
-        }
-      },
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: HomeTokens.contentMaxWidth),
+        child: ListView.separated(
+          padding: const EdgeInsets.fromLTRB(
+            HomeSpacing.md,
+            HomeSpacing.md,
+            HomeSpacing.md,
+            // Clearance so the last card never sits under the add button.
+            96,
+          ),
+          itemCount: sections.length,
+          separatorBuilder: (_, __) => const SizedBox(height: HomeSpacing.lg),
+          itemBuilder: (context, index) => sections[index],
+        ),
+      ),
     );
   }
+}
 
-  Widget _buildHeader(String title) {
+/// A labelled group (Expense / Income) rendered as one soft card of rows.
+class _CategorySection extends StatelessWidget {
+  final String title;
+  final List<Category> categories;
+  final Function(Category) pushEditCategory;
+  final VoidCallback updateList;
+
+  const _CategorySection({
+    required this.title,
+    required this.categories,
+    required this.pushEditCategory,
+    required this.updateList,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 6),
-          child: Text(
-            title,
-            style: AppTextStyle.bold20()
+          padding: const EdgeInsets.only(
+            left: HomeSpacing.xs,
+            bottom: HomeSpacing.sm,
           ),
+          child: Text(title.toUpperCase(), style: HomeTokens.label()),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Divider(
-            height: 2,
-            color: Color.fromRGBO(156, 182, 201, 1),
+        HomeCard(
+          padding: const EdgeInsets.symmetric(
+            vertical: HomeSpacing.xs,
+            horizontal: HomeSpacing.sm,
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < categories.length; i++) ...[
+                if (i > 0)
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 52,
+                    color: HomeTokens.border,
+                  ),
+                CategoriesWidget(
+                  category: categories[i],
+                  categoryDeleted: updateList,
+                  categoryEdit: pushEditCategory,
+                ),
+              ],
+            ],
           ),
         ),
       ],

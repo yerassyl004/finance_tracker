@@ -321,19 +321,18 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
     );
   }
 
-  /// Loads AI insights for the period currently shown. Runs only from the
-  /// loaded state so the summary/donut stay on screen; failures surface as an
-  /// inline [AnalysisData.aiError] rather than tearing down the page.
+  /// Resolves AI insights for the period currently shown.
+  ///
+  /// Token policy: a fresh Gemini call happens only when the user explicitly
+  /// asks ([LoadAiInsights.forceRefresh]) or when viewing the *current* month
+  /// with no cached result. Browsing past months reuses each month's cached
+  /// analysis (or shows an idle prompt) and never spends tokens automatically.
   Future<void> _onLoadAiInsights(
     LoadAiInsights event,
     Emitter<AnalysisState> emit,
   ) async {
     final data = state.mapOrNull(loaded: (s) => s.data);
     if (data == null) return;
-
-    emit(
-      AnalysisState.loaded(data: data.copyWith(aiLoading: true, aiError: null)),
-    );
 
     final profileResult = await loadFinancialProfileUsecase.execute(null);
     final profile = profileResult.fold((_) => null, (profile) => profile);
@@ -349,6 +348,17 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
       return;
     }
 
+    final isCurrentMonth = _isCurrentMonth(data.currentMonth);
+    // Only show the loading state when we might actually call Gemini; passive
+    // browsing of past months resolves instantly from cache without a spinner.
+    if (event.forceRefresh || isCurrentMonth) {
+      emit(
+        AnalysisState.loaded(
+          data: data.copyWith(aiLoading: true, aiError: null),
+        ),
+      );
+    }
+
     final result = await getFinancialAnalysisUseCase.execute(
       FinancialAnalysisArguments(
         profile: profile,
@@ -357,6 +367,7 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
         totalIncome: data.incomeAmount,
         month: data.currentMonth,
         forceRefresh: event.forceRefresh,
+        autoGenerateOnMiss: isCurrentMonth,
       ),
     );
 
@@ -366,16 +377,33 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
           data: data.copyWith(aiLoading: false, aiError: failure.message),
         ),
       ),
-      (analysis) => emit(
-        AnalysisState.loaded(
-          data: data.copyWith(
-            aiLoading: false,
-            aiAnalysis: analysis,
-            aiError: null,
-          ),
-        ),
-      ),
+      (analysis) {
+        if (analysis == null) {
+          // Idle: no cached analysis for this (past) month and we didn't
+          // generate one. The card shows an "Analyse" prompt.
+          emit(
+            AnalysisState.loaded(
+              data: data.copyWith(aiLoading: false, aiError: null),
+            ),
+          );
+        } else {
+          emit(
+            AnalysisState.loaded(
+              data: data.copyWith(
+                aiLoading: false,
+                aiAnalysis: analysis,
+                aiError: null,
+              ),
+            ),
+          );
+        }
+      },
     );
+  }
+
+  bool _isCurrentMonth(DateTime month) {
+    final now = DateTime.now();
+    return month.year == now.year && month.month == now.month;
   }
 
   /// Persists a new budget ("max") for one category, updates the card in place

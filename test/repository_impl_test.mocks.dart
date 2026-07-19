@@ -385,17 +385,21 @@ class MockFinancialAnalysisDao extends _i1.Mock
           as _i2.DatabaseHelper);
 
   @override
-  _i6.Future<int> save(_i4.FinancialAnalysis? analysis, String? fingerprint) =>
+  _i6.Future<int> save(
+    String? monthKey,
+    _i4.FinancialAnalysis? analysis,
+    String? fingerprint,
+  ) =>
       (super.noSuchMethod(
-            Invocation.method(#save, [analysis, fingerprint]),
+            Invocation.method(#save, [monthKey, analysis, fingerprint]),
             returnValue: _i6.Future<int>.value(0),
           )
           as _i6.Future<int>);
 
   @override
-  _i6.Future<_i4.CachedFinancialAnalysis?> get() =>
+  _i6.Future<_i4.CachedFinancialAnalysis?> getByMonth(String? monthKey) =>
       (super.noSuchMethod(
-            Invocation.method(#get, []),
+            Invocation.method(#getByMonth, [monthKey]),
             returnValue: _i6.Future<_i4.CachedFinancialAnalysis?>.value(),
           )
           as _i6.Future<_i4.CachedFinancialAnalysis?>);

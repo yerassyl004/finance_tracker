@@ -1,4 +1,5 @@
 import 'package:finance_app/domain/models/type_spending.dart';
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:flutter/material.dart';
 
 class CashTransactionWidget extends StatelessWidget {
@@ -9,29 +10,22 @@ class CashTransactionWidget extends StatelessWidget {
     super.key,
     required this.typeSpending,
     required this.cash,
-    required this.font
+    required this.font,
   });
 
-  Color color(TypeSpending typeSpending) {
-    switch (typeSpending) {
-      case TypeSpending.expense:
-        return Colors.orange;
-      case TypeSpending.income:
-        return Colors.green;
-      case TypeSpending.transfer:
-        return Colors.blue;
-    }
-  }
+  Color color(TypeSpending typeSpending) => HomeTokens.forType(typeSpending);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      typeSpending == TypeSpending.expense ?
-      '-₸$cash' : 
-      '₸$cash',
+      typeSpending == TypeSpending.expense ? '-₸$cash' : '₸$cash',
       style: TextStyle(
         color: color(typeSpending),
-        fontSize: font
+        fontSize: font,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
+        // Tabular figures keep amounts vertically aligned down the list.
+        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }

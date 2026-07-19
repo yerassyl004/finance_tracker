@@ -4,30 +4,40 @@ import 'package:finance_app/data/data_source/local/database_helper.dart';
 import 'package:finance_app/domain/models/financial_analysis.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// Persists the single cached AI analysis row so results survive app restarts
-/// and can be reused when the inputs haven't changed (see
-/// [FinancialAnalysisArguments.fingerprint]).
+/// Persists AI analyses, one cached row per month (row id = month key, e.g.
+/// `2026-07`). Keeping a row per month means switching months reuses each
+/// month's result instead of evicting a single shared slot — the main token
+/// optimisation. Old rows are pruned so the table can't grow unbounded.
 class FinancialAnalysisDao {
   final dbHelper = DatabaseHelper.instance;
 
-  Future<int> save(FinancialAnalysis analysis, String fingerprint) async {
+  /// How many months of cached analyses to retain (oldest are pruned).
+  static const int _maxRows = 24;
+
+  Future<int> save(
+    String monthKey,
+    FinancialAnalysis analysis,
+    String fingerprint,
+  ) async {
     final db = await dbHelper.database;
-    return db.insert('financial_analysis_cache', {
-      'id': CachedFinancialAnalysis.primaryId,
+    final result = await db.insert('financial_analysis_cache', {
+      'id': monthKey,
       'fingerprint': fingerprint,
       'analysisJson': jsonEncode(analysis.toJson()),
       'updatedAt': DateTime.now().millisecondsSinceEpoch,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _prune(db);
+    return result;
   }
 
-  /// Returns the cached analysis, or null if nothing has been saved yet or the
-  /// stored payload is unreadable.
-  Future<CachedFinancialAnalysis?> get() async {
+  /// Returns the cached analysis for [monthKey], or null if none is stored or
+  /// the payload is unreadable.
+  Future<CachedFinancialAnalysis?> getByMonth(String monthKey) async {
     final db = await dbHelper.database;
     final rows = await db.query(
       'financial_analysis_cache',
       where: 'id = ?',
-      whereArgs: [CachedFinancialAnalysis.primaryId],
+      whereArgs: [monthKey],
       limit: 1,
     );
     if (rows.isEmpty) return null;
@@ -44,6 +54,23 @@ class FinancialAnalysisDao {
     } catch (_) {
       // Corrupt/legacy payload — treat as no cache so we regenerate.
       return null;
+    }
+  }
+
+  /// Keeps only the [_maxRows] most-recently-updated months.
+  Future<void> _prune(Database db) async {
+    final rows = await db.query(
+      'financial_analysis_cache',
+      columns: ['id'],
+      orderBy: 'updatedAt DESC',
+    );
+    if (rows.length <= _maxRows) return;
+    for (final row in rows.sublist(_maxRows)) {
+      await db.delete(
+        'financial_analysis_cache',
+        where: 'id = ?',
+        whereArgs: [row['id']],
+      );
     }
   }
 }

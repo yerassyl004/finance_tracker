@@ -357,19 +357,19 @@ class MockRepository extends _i1.Mock implements _i3.Repository {
           as _i4.Future<_i2.Either<_i5.Failure, _i12.FinancialProfile?>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis>>
+  _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis?>>
   getFinancialAnalysis(_i13.FinancialAnalysisArguments? args) =>
       (super.noSuchMethod(
             Invocation.method(#getFinancialAnalysis, [args]),
             returnValue:
                 _i4.Future<
-                  _i2.Either<_i5.Failure, _i13.FinancialAnalysis>
+                  _i2.Either<_i5.Failure, _i13.FinancialAnalysis?>
                 >.value(
-                  _FakeEither_0<_i5.Failure, _i13.FinancialAnalysis>(
+                  _FakeEither_0<_i5.Failure, _i13.FinancialAnalysis?>(
                     this,
                     Invocation.method(#getFinancialAnalysis, [args]),
                   ),
                 ),
           )
-          as _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis>>);
+          as _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis?>>);
 }

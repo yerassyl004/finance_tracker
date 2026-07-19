@@ -54,8 +54,10 @@ abstract class Repository {
   );
   Future<Either<Failure, FinancialProfile?>> loadFinancialProfile();
 
-  /// AI financial analysis (Gemini)
-  Future<Either<Failure, FinancialAnalysis>> getFinancialAnalysis(
+  /// AI financial analysis (Gemini). Returns null when there is no cached
+  /// analysis and generation was not requested (e.g. browsing a past month) —
+  /// this is an idle result, not an error.
+  Future<Either<Failure, FinancialAnalysis?>> getFinancialAnalysis(
     FinancialAnalysisArguments args,
   );
 }
