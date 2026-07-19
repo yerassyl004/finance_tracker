@@ -57,6 +57,11 @@ dependencies:
   dartz: ^0.10.1
   auto_route: ^10.0.1
   firebase_core: ^4.0.0
+  # Gemini AI financial analysis (Task 2).
+  google_generative_ai: ^0.4.7
+  # Local reminder notifications (Task 3).
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
 
 dev_dependencies:
   flutter_test:

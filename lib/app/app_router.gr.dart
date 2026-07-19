@@ -46,6 +46,64 @@ class NewCreateTransactionsRouteArgs {
   String toString() {
     return 'NewCreateTransactionsRouteArgs{key: $key, args: $args}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NewCreateTransactionsRouteArgs) return false;
+    return key == other.key && args == other.args;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ args.hashCode;
+}
+
+/// generated route for
+/// [OnboardingPage]
+class OnboardingRoute extends PageRouteInfo<void> {
+  const OnboardingRoute({List<PageRouteInfo>? children})
+    : super(OnboardingRoute.name, initialChildren: children);
+
+  static const String name = 'OnboardingRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OnboardingPage();
+    },
+  );
+}
+
+/// generated route for
+/// [SplashPage]
+class SplashRoute extends PageRouteInfo<void> {
+  const SplashRoute({List<PageRouteInfo>? children})
+    : super(SplashRoute.name, initialChildren: children);
+
+  static const String name = 'SplashRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SplashPage();
+    },
+  );
+}
+
+/// generated route for
+/// [SurveyPage]
+class SurveyRoute extends PageRouteInfo<void> {
+  const SurveyRoute({List<PageRouteInfo>? children})
+    : super(SurveyRoute.name, initialChildren: children);
+
+  static const String name = 'SurveyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SurveyPage();
+    },
+  );
 }
 
 /// generated route for
@@ -100,4 +158,14 @@ class TransactionsCategoryRouteArgs {
   String toString() {
     return 'TransactionsCategoryRouteArgs{key: $key, args: $args}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TransactionsCategoryRouteArgs) return false;
+    return key == other.key && args == other.args;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ args.hashCode;
 }

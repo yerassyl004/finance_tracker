@@ -12,7 +12,8 @@ part of 'transaction_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$TransactionData {
@@ -32,15 +33,17 @@ mixin _$TransactionData {
 /// @nodoc
 abstract class $TransactionDataCopyWith<$Res> {
   factory $TransactionDataCopyWith(
-          TransactionData value, $Res Function(TransactionData) then) =
-      _$TransactionDataCopyWithImpl<$Res, TransactionData>;
+    TransactionData value,
+    $Res Function(TransactionData) then,
+  ) = _$TransactionDataCopyWithImpl<$Res, TransactionData>;
   @useResult
-  $Res call(
-      {DateTime currentMonth,
-      List<Transaction> transactions,
-      double expenseAmount,
-      double incomeAmount,
-      String? errorMessage});
+  $Res call({
+    DateTime currentMonth,
+    List<Transaction> transactions,
+    double expenseAmount,
+    double incomeAmount,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -64,45 +67,50 @@ class _$TransactionDataCopyWithImpl<$Res, $Val extends TransactionData>
     Object? incomeAmount = null,
     Object? errorMessage = freezed,
   }) {
-    return _then(_value.copyWith(
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      transactions: null == transactions
-          ? _value.transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<Transaction>,
-      expenseAmount: null == expenseAmount
-          ? _value.expenseAmount
-          : expenseAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      incomeAmount: null == incomeAmount
-          ? _value.incomeAmount
-          : incomeAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            currentMonth: null == currentMonth
+                ? _value.currentMonth
+                : currentMonth // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            transactions: null == transactions
+                ? _value.transactions
+                : transactions // ignore: cast_nullable_to_non_nullable
+                      as List<Transaction>,
+            expenseAmount: null == expenseAmount
+                ? _value.expenseAmount
+                : expenseAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            incomeAmount: null == incomeAmount
+                ? _value.incomeAmount
+                : incomeAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            errorMessage: freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TransactionDataImplCopyWith<$Res>
     implements $TransactionDataCopyWith<$Res> {
-  factory _$$TransactionDataImplCopyWith(_$TransactionDataImpl value,
-          $Res Function(_$TransactionDataImpl) then) =
-      __$$TransactionDataImplCopyWithImpl<$Res>;
+  factory _$$TransactionDataImplCopyWith(
+    _$TransactionDataImpl value,
+    $Res Function(_$TransactionDataImpl) then,
+  ) = __$$TransactionDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {DateTime currentMonth,
-      List<Transaction> transactions,
-      double expenseAmount,
-      double incomeAmount,
-      String? errorMessage});
+  $Res call({
+    DateTime currentMonth,
+    List<Transaction> transactions,
+    double expenseAmount,
+    double incomeAmount,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -110,8 +118,9 @@ class __$$TransactionDataImplCopyWithImpl<$Res>
     extends _$TransactionDataCopyWithImpl<$Res, _$TransactionDataImpl>
     implements _$$TransactionDataImplCopyWith<$Res> {
   __$$TransactionDataImplCopyWithImpl(
-      _$TransactionDataImpl _value, $Res Function(_$TransactionDataImpl) _then)
-      : super(_value, _then);
+    _$TransactionDataImpl _value,
+    $Res Function(_$TransactionDataImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionData
   /// with the given fields replaced by the non-null parameter values.
@@ -124,41 +133,43 @@ class __$$TransactionDataImplCopyWithImpl<$Res>
     Object? incomeAmount = null,
     Object? errorMessage = freezed,
   }) {
-    return _then(_$TransactionDataImpl(
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      transactions: null == transactions
-          ? _value._transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<Transaction>,
-      expenseAmount: null == expenseAmount
-          ? _value.expenseAmount
-          : expenseAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      incomeAmount: null == incomeAmount
-          ? _value.incomeAmount
-          : incomeAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$TransactionDataImpl(
+        currentMonth: null == currentMonth
+            ? _value.currentMonth
+            : currentMonth // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        transactions: null == transactions
+            ? _value._transactions
+            : transactions // ignore: cast_nullable_to_non_nullable
+                  as List<Transaction>,
+        expenseAmount: null == expenseAmount
+            ? _value.expenseAmount
+            : expenseAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        incomeAmount: null == incomeAmount
+            ? _value.incomeAmount
+            : incomeAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        errorMessage: freezed == errorMessage
+            ? _value.errorMessage
+            : errorMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$TransactionDataImpl implements _TransactionData {
-  const _$TransactionDataImpl(
-      {required this.currentMonth,
-      required final List<Transaction> transactions,
-      this.expenseAmount = 0,
-      this.incomeAmount = 0,
-      this.errorMessage})
-      : _transactions = transactions;
+  const _$TransactionDataImpl({
+    required this.currentMonth,
+    required final List<Transaction> transactions,
+    this.expenseAmount = 0,
+    this.incomeAmount = 0,
+    this.errorMessage,
+  }) : _transactions = transactions;
 
   @override
   final DateTime currentMonth;
@@ -191,8 +202,10 @@ class _$TransactionDataImpl implements _TransactionData {
             other is _$TransactionDataImpl &&
             (identical(other.currentMonth, currentMonth) ||
                 other.currentMonth == currentMonth) &&
-            const DeepCollectionEquality()
-                .equals(other._transactions, _transactions) &&
+            const DeepCollectionEquality().equals(
+              other._transactions,
+              _transactions,
+            ) &&
             (identical(other.expenseAmount, expenseAmount) ||
                 other.expenseAmount == expenseAmount) &&
             (identical(other.incomeAmount, incomeAmount) ||
@@ -203,12 +216,13 @@ class _$TransactionDataImpl implements _TransactionData {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      currentMonth,
-      const DeepCollectionEquality().hash(_transactions),
-      expenseAmount,
-      incomeAmount,
-      errorMessage);
+    runtimeType,
+    currentMonth,
+    const DeepCollectionEquality().hash(_transactions),
+    expenseAmount,
+    incomeAmount,
+    errorMessage,
+  );
 
   /// Create a copy of TransactionData
   /// with the given fields replaced by the non-null parameter values.
@@ -217,16 +231,19 @@ class _$TransactionDataImpl implements _TransactionData {
   @pragma('vm:prefer-inline')
   _$$TransactionDataImplCopyWith<_$TransactionDataImpl> get copyWith =>
       __$$TransactionDataImplCopyWithImpl<_$TransactionDataImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _TransactionData implements TransactionData {
-  const factory _TransactionData(
-      {required final DateTime currentMonth,
-      required final List<Transaction> transactions,
-      final double expenseAmount,
-      final double incomeAmount,
-      final String? errorMessage}) = _$TransactionDataImpl;
+  const factory _TransactionData({
+    required final DateTime currentMonth,
+    required final List<Transaction> transactions,
+    final double expenseAmount,
+    final double incomeAmount,
+    final String? errorMessage,
+  }) = _$TransactionDataImpl;
 
   @override
   DateTime get currentMonth;
@@ -254,41 +271,35 @@ mixin _$TransactionEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(DateTime month) loadTransactionItems,
     required TResult Function(DateTime month) updateTransactionItems,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(DateTime month)? loadTransactionItems,
     TResult? Function(DateTime month)? updateTransactionItems,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(DateTime month)? loadTransactionItems,
     TResult Function(DateTime month)? updateTransactionItems,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactionItems value) loadTransactionItems,
     required TResult Function(UpdateTransactionItems value)
-        updateTransactionItems,
-  }) =>
-      throw _privateConstructorUsedError;
+    updateTransactionItems,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadTransactionItems value)? loadTransactionItems,
     TResult? Function(UpdateTransactionItems value)? updateTransactionItems,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadTransactionItems value)? loadTransactionItems,
     TResult Function(UpdateTransactionItems value)? updateTransactionItems,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Create a copy of TransactionEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -300,8 +311,9 @@ mixin _$TransactionEvent {
 /// @nodoc
 abstract class $TransactionEventCopyWith<$Res> {
   factory $TransactionEventCopyWith(
-          TransactionEvent value, $Res Function(TransactionEvent) then) =
-      _$TransactionEventCopyWithImpl<$Res, TransactionEvent>;
+    TransactionEvent value,
+    $Res Function(TransactionEvent) then,
+  ) = _$TransactionEventCopyWithImpl<$Res, TransactionEvent>;
   @useResult
   $Res call({DateTime month});
 }
@@ -320,24 +332,26 @@ class _$TransactionEventCopyWithImpl<$Res, $Val extends TransactionEvent>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? month = null,
-  }) {
-    return _then(_value.copyWith(
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+  $Res call({Object? month = null}) {
+    return _then(
+      _value.copyWith(
+            month: null == month
+                ? _value.month
+                : month // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$LoadTransactionItemsImplCopyWith<$Res>
     implements $TransactionEventCopyWith<$Res> {
-  factory _$$LoadTransactionItemsImplCopyWith(_$LoadTransactionItemsImpl value,
-          $Res Function(_$LoadTransactionItemsImpl) then) =
-      __$$LoadTransactionItemsImplCopyWithImpl<$Res>;
+  factory _$$LoadTransactionItemsImplCopyWith(
+    _$LoadTransactionItemsImpl value,
+    $Res Function(_$LoadTransactionItemsImpl) then,
+  ) = __$$LoadTransactionItemsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({DateTime month});
@@ -347,23 +361,24 @@ abstract class _$$LoadTransactionItemsImplCopyWith<$Res>
 class __$$LoadTransactionItemsImplCopyWithImpl<$Res>
     extends _$TransactionEventCopyWithImpl<$Res, _$LoadTransactionItemsImpl>
     implements _$$LoadTransactionItemsImplCopyWith<$Res> {
-  __$$LoadTransactionItemsImplCopyWithImpl(_$LoadTransactionItemsImpl _value,
-      $Res Function(_$LoadTransactionItemsImpl) _then)
-      : super(_value, _then);
+  __$$LoadTransactionItemsImplCopyWithImpl(
+    _$LoadTransactionItemsImpl _value,
+    $Res Function(_$LoadTransactionItemsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? month = null,
-  }) {
-    return _then(_$LoadTransactionItemsImpl(
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+  $Res call({Object? month = null}) {
+    return _then(
+      _$LoadTransactionItemsImpl(
+        month: null == month
+            ? _value.month
+            : month // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
@@ -397,9 +412,11 @@ class _$LoadTransactionItemsImpl implements LoadTransactionItems {
   @override
   @pragma('vm:prefer-inline')
   _$$LoadTransactionItemsImplCopyWith<_$LoadTransactionItemsImpl>
-      get copyWith =>
-          __$$LoadTransactionItemsImplCopyWithImpl<_$LoadTransactionItemsImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$LoadTransactionItemsImplCopyWithImpl<_$LoadTransactionItemsImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -437,7 +454,7 @@ class _$LoadTransactionItemsImpl implements LoadTransactionItems {
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactionItems value) loadTransactionItems,
     required TResult Function(UpdateTransactionItems value)
-        updateTransactionItems,
+    updateTransactionItems,
   }) {
     return loadTransactionItems(this);
   }
@@ -477,16 +494,16 @@ abstract class LoadTransactionItems implements TransactionEvent {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadTransactionItemsImplCopyWith<_$LoadTransactionItemsImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$UpdateTransactionItemsImplCopyWith<$Res>
     implements $TransactionEventCopyWith<$Res> {
   factory _$$UpdateTransactionItemsImplCopyWith(
-          _$UpdateTransactionItemsImpl value,
-          $Res Function(_$UpdateTransactionItemsImpl) then) =
-      __$$UpdateTransactionItemsImplCopyWithImpl<$Res>;
+    _$UpdateTransactionItemsImpl value,
+    $Res Function(_$UpdateTransactionItemsImpl) then,
+  ) = __$$UpdateTransactionItemsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({DateTime month});
@@ -497,23 +514,23 @@ class __$$UpdateTransactionItemsImplCopyWithImpl<$Res>
     extends _$TransactionEventCopyWithImpl<$Res, _$UpdateTransactionItemsImpl>
     implements _$$UpdateTransactionItemsImplCopyWith<$Res> {
   __$$UpdateTransactionItemsImplCopyWithImpl(
-      _$UpdateTransactionItemsImpl _value,
-      $Res Function(_$UpdateTransactionItemsImpl) _then)
-      : super(_value, _then);
+    _$UpdateTransactionItemsImpl _value,
+    $Res Function(_$UpdateTransactionItemsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? month = null,
-  }) {
-    return _then(_$UpdateTransactionItemsImpl(
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+  $Res call({Object? month = null}) {
+    return _then(
+      _$UpdateTransactionItemsImpl(
+        month: null == month
+            ? _value.month
+            : month // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
@@ -547,8 +564,11 @@ class _$UpdateTransactionItemsImpl implements UpdateTransactionItems {
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateTransactionItemsImplCopyWith<_$UpdateTransactionItemsImpl>
-      get copyWith => __$$UpdateTransactionItemsImplCopyWithImpl<
-          _$UpdateTransactionItemsImpl>(this, _$identity);
+  get copyWith =>
+      __$$UpdateTransactionItemsImplCopyWithImpl<_$UpdateTransactionItemsImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -586,7 +606,7 @@ class _$UpdateTransactionItemsImpl implements UpdateTransactionItems {
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactionItems value) loadTransactionItems,
     required TResult Function(UpdateTransactionItems value)
-        updateTransactionItems,
+    updateTransactionItems,
   }) {
     return updateTransactionItems(this);
   }
@@ -626,7 +646,7 @@ abstract class UpdateTransactionItems implements TransactionEvent {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateTransactionItemsImplCopyWith<_$UpdateTransactionItemsImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -637,16 +657,14 @@ mixin _$TransactionState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(TransactionData data) loaded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(TransactionData data)? loaded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -654,24 +672,21 @@ mixin _$TransactionState {
     TResult Function(String message)? error,
     TResult Function(TransactionData data)? loaded,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(TransactionInitial value) initial,
     required TResult Function(TransactionLoading value) loading,
     required TResult Function(TransactionError value) error,
     required TResult Function(TransactionLoaded value) loaded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(TransactionInitial value)? initial,
     TResult? Function(TransactionLoading value)? loading,
     TResult? Function(TransactionError value)? error,
     TResult? Function(TransactionLoaded value)? loaded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(TransactionInitial value)? initial,
@@ -679,15 +694,15 @@ mixin _$TransactionState {
     TResult Function(TransactionError value)? error,
     TResult Function(TransactionLoaded value)? loaded,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TransactionStateCopyWith<$Res> {
   factory $TransactionStateCopyWith(
-          TransactionState value, $Res Function(TransactionState) then) =
-      _$TransactionStateCopyWithImpl<$Res, TransactionState>;
+    TransactionState value,
+    $Res Function(TransactionState) then,
+  ) = _$TransactionStateCopyWithImpl<$Res, TransactionState>;
 }
 
 /// @nodoc
@@ -706,18 +721,20 @@ class _$TransactionStateCopyWithImpl<$Res, $Val extends TransactionState>
 
 /// @nodoc
 abstract class _$$TransactionInitialImplCopyWith<$Res> {
-  factory _$$TransactionInitialImplCopyWith(_$TransactionInitialImpl value,
-          $Res Function(_$TransactionInitialImpl) then) =
-      __$$TransactionInitialImplCopyWithImpl<$Res>;
+  factory _$$TransactionInitialImplCopyWith(
+    _$TransactionInitialImpl value,
+    $Res Function(_$TransactionInitialImpl) then,
+  ) = __$$TransactionInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$TransactionInitialImplCopyWithImpl<$Res>
     extends _$TransactionStateCopyWithImpl<$Res, _$TransactionInitialImpl>
     implements _$$TransactionInitialImplCopyWith<$Res> {
-  __$$TransactionInitialImplCopyWithImpl(_$TransactionInitialImpl _value,
-      $Res Function(_$TransactionInitialImpl) _then)
-      : super(_value, _then);
+  __$$TransactionInitialImplCopyWithImpl(
+    _$TransactionInitialImpl _value,
+    $Res Function(_$TransactionInitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -823,18 +840,20 @@ abstract class TransactionInitial implements TransactionState {
 
 /// @nodoc
 abstract class _$$TransactionLoadingImplCopyWith<$Res> {
-  factory _$$TransactionLoadingImplCopyWith(_$TransactionLoadingImpl value,
-          $Res Function(_$TransactionLoadingImpl) then) =
-      __$$TransactionLoadingImplCopyWithImpl<$Res>;
+  factory _$$TransactionLoadingImplCopyWith(
+    _$TransactionLoadingImpl value,
+    $Res Function(_$TransactionLoadingImpl) then,
+  ) = __$$TransactionLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$TransactionLoadingImplCopyWithImpl<$Res>
     extends _$TransactionStateCopyWithImpl<$Res, _$TransactionLoadingImpl>
     implements _$$TransactionLoadingImplCopyWith<$Res> {
-  __$$TransactionLoadingImplCopyWithImpl(_$TransactionLoadingImpl _value,
-      $Res Function(_$TransactionLoadingImpl) _then)
-      : super(_value, _then);
+  __$$TransactionLoadingImplCopyWithImpl(
+    _$TransactionLoadingImpl _value,
+    $Res Function(_$TransactionLoadingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -940,9 +959,10 @@ abstract class TransactionLoading implements TransactionState {
 
 /// @nodoc
 abstract class _$$TransactionErrorImplCopyWith<$Res> {
-  factory _$$TransactionErrorImplCopyWith(_$TransactionErrorImpl value,
-          $Res Function(_$TransactionErrorImpl) then) =
-      __$$TransactionErrorImplCopyWithImpl<$Res>;
+  factory _$$TransactionErrorImplCopyWith(
+    _$TransactionErrorImpl value,
+    $Res Function(_$TransactionErrorImpl) then,
+  ) = __$$TransactionErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
@@ -951,23 +971,24 @@ abstract class _$$TransactionErrorImplCopyWith<$Res> {
 class __$$TransactionErrorImplCopyWithImpl<$Res>
     extends _$TransactionStateCopyWithImpl<$Res, _$TransactionErrorImpl>
     implements _$$TransactionErrorImplCopyWith<$Res> {
-  __$$TransactionErrorImplCopyWithImpl(_$TransactionErrorImpl _value,
-      $Res Function(_$TransactionErrorImpl) _then)
-      : super(_value, _then);
+  __$$TransactionErrorImplCopyWithImpl(
+    _$TransactionErrorImpl _value,
+    $Res Function(_$TransactionErrorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$TransactionErrorImpl(
-      null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? message = null}) {
+    return _then(
+      _$TransactionErrorImpl(
+        null == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -1002,7 +1023,9 @@ class _$TransactionErrorImpl implements TransactionError {
   @pragma('vm:prefer-inline')
   _$$TransactionErrorImplCopyWith<_$TransactionErrorImpl> get copyWith =>
       __$$TransactionErrorImplCopyWithImpl<_$TransactionErrorImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -1093,9 +1116,10 @@ abstract class TransactionError implements TransactionState {
 
 /// @nodoc
 abstract class _$$TransactionLoadedImplCopyWith<$Res> {
-  factory _$$TransactionLoadedImplCopyWith(_$TransactionLoadedImpl value,
-          $Res Function(_$TransactionLoadedImpl) then) =
-      __$$TransactionLoadedImplCopyWithImpl<$Res>;
+  factory _$$TransactionLoadedImplCopyWith(
+    _$TransactionLoadedImpl value,
+    $Res Function(_$TransactionLoadedImpl) then,
+  ) = __$$TransactionLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({TransactionData data});
 
@@ -1106,23 +1130,24 @@ abstract class _$$TransactionLoadedImplCopyWith<$Res> {
 class __$$TransactionLoadedImplCopyWithImpl<$Res>
     extends _$TransactionStateCopyWithImpl<$Res, _$TransactionLoadedImpl>
     implements _$$TransactionLoadedImplCopyWith<$Res> {
-  __$$TransactionLoadedImplCopyWithImpl(_$TransactionLoadedImpl _value,
-      $Res Function(_$TransactionLoadedImpl) _then)
-      : super(_value, _then);
+  __$$TransactionLoadedImplCopyWithImpl(
+    _$TransactionLoadedImpl _value,
+    $Res Function(_$TransactionLoadedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$TransactionLoadedImpl(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as TransactionData,
-    ));
+  $Res call({Object? data = null}) {
+    return _then(
+      _$TransactionLoadedImpl(
+        data: null == data
+            ? _value.data
+            : data // ignore: cast_nullable_to_non_nullable
+                  as TransactionData,
+      ),
+    );
   }
 
   /// Create a copy of TransactionState
@@ -1167,7 +1192,9 @@ class _$TransactionLoadedImpl implements TransactionLoaded {
   @pragma('vm:prefer-inline')
   _$$TransactionLoadedImplCopyWith<_$TransactionLoadedImpl> get copyWith =>
       __$$TransactionLoadedImplCopyWithImpl<_$TransactionLoadedImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs

@@ -3,16 +3,24 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
-import 'package:finance_app/data/data_source/local/account_dao.dart' as _i4;
-import 'package:finance_app/data/data_source/local/category_dao.dart' as _i6;
+import 'package:finance_app/data/data_source/local/account_dao.dart' as _i5;
+import 'package:finance_app/data/data_source/local/category_dao.dart' as _i7;
 import 'package:finance_app/data/data_source/local/database_helper.dart' as _i2;
-import 'package:finance_app/data/data_source/local/transaction_dao.dart' as _i8;
+import 'package:finance_app/data/data_source/local/financial_analysis_dao.dart'
+    as _i15;
+import 'package:finance_app/data/data_source/local/financial_profile_dao.dart'
+    as _i12;
+import 'package:finance_app/data/data_source/local/transaction_dao.dart' as _i9;
+import 'package:finance_app/data/data_source/remote/gemini_remote_data_source.dart'
+    as _i14;
 import 'package:finance_app/domain/models/account.dart' as _i3;
-import 'package:finance_app/domain/models/category.dart' as _i7;
-import 'package:finance_app/domain/models/transaction.dart' as _i9;
-import 'package:finance_app/domain/models/type_spending.dart' as _i10;
+import 'package:finance_app/domain/models/category.dart' as _i8;
+import 'package:finance_app/domain/models/financial_analysis.dart' as _i4;
+import 'package:finance_app/domain/models/financial_profile.dart' as _i13;
+import 'package:finance_app/domain/models/transaction.dart' as _i10;
+import 'package:finance_app/domain/models/type_spending.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -31,287 +39,364 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeDatabaseHelper_0 extends _i1.SmartFake
     implements _i2.DatabaseHelper {
-  _FakeDatabaseHelper_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDatabaseHelper_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeAccount_1 extends _i1.SmartFake implements _i3.Account {
-  _FakeAccount_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeAccount_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeFinancialAnalysis_2 extends _i1.SmartFake
+    implements _i4.FinancialAnalysis {
+  _FakeFinancialAnalysis_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [AccountDao].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAccountDao extends _i1.Mock implements _i4.AccountDao {
+class MockAccountDao extends _i1.Mock implements _i5.AccountDao {
   MockAccountDao() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.DatabaseHelper get dbHelper => (super.noSuchMethod(
-        Invocation.getter(#dbHelper),
-        returnValue: _FakeDatabaseHelper_0(
-          this,
-          Invocation.getter(#dbHelper),
-        ),
-      ) as _i2.DatabaseHelper);
-
-  @override
-  _i5.Future<void> insertAccounts(List<_i3.Account>? categories) =>
+  _i2.DatabaseHelper get dbHelper =>
       (super.noSuchMethod(
-        Invocation.method(
-          #insertAccounts,
-          [categories],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.getter(#dbHelper),
+            returnValue: _FakeDatabaseHelper_0(
+              this,
+              Invocation.getter(#dbHelper),
+            ),
+          )
+          as _i2.DatabaseHelper);
 
   @override
-  _i5.Future<int> insertAccount(_i3.Account? account) => (super.noSuchMethod(
-        Invocation.method(
-          #insertAccount,
-          [account],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+  _i6.Future<void> insertAccounts(List<_i3.Account>? categories) =>
+      (super.noSuchMethod(
+            Invocation.method(#insertAccounts, [categories]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 
   @override
-  _i5.Future<List<_i3.Account>> getAccounts() => (super.noSuchMethod(
-        Invocation.method(
-          #getAccounts,
-          [],
-        ),
-        returnValue: _i5.Future<List<_i3.Account>>.value(<_i3.Account>[]),
-      ) as _i5.Future<List<_i3.Account>>);
+  _i6.Future<int> insertAccount(_i3.Account? account) =>
+      (super.noSuchMethod(
+            Invocation.method(#insertAccount, [account]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
 
   @override
-  _i5.Future<int> deleteAccount(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteAccount,
-          [id],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+  _i6.Future<List<_i3.Account>> getAccounts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAccounts, []),
+            returnValue: _i6.Future<List<_i3.Account>>.value(<_i3.Account>[]),
+          )
+          as _i6.Future<List<_i3.Account>>);
 
   @override
-  _i5.Future<int> updateAccount(_i3.Account? account) => (super.noSuchMethod(
-        Invocation.method(
-          #updateAccount,
-          [account],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+  _i6.Future<int> deleteAccount(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteAccount, [id]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
 
   @override
-  _i5.Future<void> transferMoney(
+  _i6.Future<int> updateAccount(_i3.Account? account) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateAccount, [account]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<void> transferMoney(
     String? fromAccountId,
     String? toAccountId,
     double? amount,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #transferMoney,
-          [
-            fromAccountId,
-            toAccountId,
-            amount,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#transferMoney, [
+              fromAccountId,
+              toAccountId,
+              amount,
+            ]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 
   @override
-  _i5.Future<_i3.Account> getAccountById(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #getAccountById,
-          [id],
-        ),
-        returnValue: _i5.Future<_i3.Account>.value(_FakeAccount_1(
-          this,
-          Invocation.method(
-            #getAccountById,
-            [id],
-          ),
-        )),
-      ) as _i5.Future<_i3.Account>);
+  _i6.Future<_i3.Account> getAccountById(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#getAccountById, [id]),
+            returnValue: _i6.Future<_i3.Account>.value(
+              _FakeAccount_1(this, Invocation.method(#getAccountById, [id])),
+            ),
+          )
+          as _i6.Future<_i3.Account>);
 }
 
 /// A class which mocks [CategoryDao].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCategoryDao extends _i1.Mock implements _i6.CategoryDao {
+class MockCategoryDao extends _i1.Mock implements _i7.CategoryDao {
   MockCategoryDao() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.DatabaseHelper get dbHelper => (super.noSuchMethod(
-        Invocation.getter(#dbHelper),
-        returnValue: _FakeDatabaseHelper_0(
-          this,
-          Invocation.getter(#dbHelper),
-        ),
-      ) as _i2.DatabaseHelper);
-
-  @override
-  _i5.Future<void> insertCategories(List<_i7.Category>? categories) =>
+  _i2.DatabaseHelper get dbHelper =>
       (super.noSuchMethod(
-        Invocation.method(
-          #insertCategories,
-          [categories],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.getter(#dbHelper),
+            returnValue: _FakeDatabaseHelper_0(
+              this,
+              Invocation.getter(#dbHelper),
+            ),
+          )
+          as _i2.DatabaseHelper);
 
   @override
-  _i5.Future<int> insertCategory(_i7.Category? category) => (super.noSuchMethod(
-        Invocation.method(
-          #insertCategory,
-          [category],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
-
-  @override
-  _i5.Future<List<_i7.Category>> loadCategories(int? type) =>
+  _i6.Future<void> insertCategories(List<_i8.Category>? categories) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #loadCategories,
-          [type],
-        ),
-        returnValue: _i5.Future<List<_i7.Category>>.value(<_i7.Category>[]),
-      ) as _i5.Future<List<_i7.Category>>);
+            Invocation.method(#insertCategories, [categories]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 
   @override
-  _i5.Future<int> deleteCategory(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteCategory,
-          [id],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+  _i6.Future<int> insertCategory(_i8.Category? category) =>
+      (super.noSuchMethod(
+            Invocation.method(#insertCategory, [category]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
 
   @override
-  _i5.Future<int> updateCategory(_i7.Category? category) => (super.noSuchMethod(
-        Invocation.method(
-          #updateCategory,
-          [category],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+  _i6.Future<List<_i8.Category>> loadCategories(int? type) =>
+      (super.noSuchMethod(
+            Invocation.method(#loadCategories, [type]),
+            returnValue: _i6.Future<List<_i8.Category>>.value(<_i8.Category>[]),
+          )
+          as _i6.Future<List<_i8.Category>>);
 
   @override
-  _i5.Future<_i7.Category?> loadCategoryById(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #loadCategoryById,
-          [id],
-        ),
-        returnValue: _i5.Future<_i7.Category?>.value(),
-      ) as _i5.Future<_i7.Category?>);
+  _i6.Future<int> deleteCategory(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteCategory, [id]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<int> updateCategory(_i8.Category? category) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateCategory, [category]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<_i8.Category?> loadCategoryById(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#loadCategoryById, [id]),
+            returnValue: _i6.Future<_i8.Category?>.value(),
+          )
+          as _i6.Future<_i8.Category?>);
 }
 
 /// A class which mocks [TransactionDao].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTransactionDao extends _i1.Mock implements _i8.TransactionDao {
+class MockTransactionDao extends _i1.Mock implements _i9.TransactionDao {
   MockTransactionDao() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.DatabaseHelper get dbHelper => (super.noSuchMethod(
-        Invocation.getter(#dbHelper),
-        returnValue: _FakeDatabaseHelper_0(
-          this,
-          Invocation.getter(#dbHelper),
-        ),
-      ) as _i2.DatabaseHelper);
-
-  @override
-  _i5.Future<int> insertTransaction(_i9.Transaction? transaction) =>
+  _i2.DatabaseHelper get dbHelper =>
       (super.noSuchMethod(
-        Invocation.method(
-          #insertTransaction,
-          [transaction],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+            Invocation.getter(#dbHelper),
+            returnValue: _FakeDatabaseHelper_0(
+              this,
+              Invocation.getter(#dbHelper),
+            ),
+          )
+          as _i2.DatabaseHelper);
 
   @override
-  _i5.Future<List<_i9.Transaction>> getTransactions(DateTime? selectedDate) =>
+  _i6.Future<int> insertTransaction(_i10.Transaction? transaction) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getTransactions,
-          [selectedDate],
-        ),
-        returnValue:
-            _i5.Future<List<_i9.Transaction>>.value(<_i9.Transaction>[]),
-      ) as _i5.Future<List<_i9.Transaction>>);
+            Invocation.method(#insertTransaction, [transaction]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
 
   @override
-  _i5.Future<List<_i9.Transaction>> getTransactionsBySpending(
+  _i6.Future<List<_i10.Transaction>> getTransactions(DateTime? selectedDate) =>
+      (super.noSuchMethod(
+            Invocation.method(#getTransactions, [selectedDate]),
+            returnValue: _i6.Future<List<_i10.Transaction>>.value(
+              <_i10.Transaction>[],
+            ),
+          )
+          as _i6.Future<List<_i10.Transaction>>);
+
+  @override
+  _i6.Future<List<_i10.Transaction>> getTransactionsBySpending(
     DateTime? selectedDate,
-    _i10.TypeSpending? typeSpending,
+    _i11.TypeSpending? typeSpending,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getTransactionsBySpending,
-          [
-            selectedDate,
-            typeSpending,
-          ],
-        ),
-        returnValue:
-            _i5.Future<List<_i9.Transaction>>.value(<_i9.Transaction>[]),
-      ) as _i5.Future<List<_i9.Transaction>>);
+            Invocation.method(#getTransactionsBySpending, [
+              selectedDate,
+              typeSpending,
+            ]),
+            returnValue: _i6.Future<List<_i10.Transaction>>.value(
+              <_i10.Transaction>[],
+            ),
+          )
+          as _i6.Future<List<_i10.Transaction>>);
 
   @override
-  _i5.Future<List<_i9.Transaction>> getTransactionsByCategory(
+  _i6.Future<List<_i10.Transaction>> getTransactionsByCategory(
     DateTime? selectedDate,
-    _i7.Category? category,
+    _i8.Category? category,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getTransactionsByCategory,
-          [
-            selectedDate,
-            category,
-          ],
-        ),
-        returnValue:
-            _i5.Future<List<_i9.Transaction>>.value(<_i9.Transaction>[]),
-      ) as _i5.Future<List<_i9.Transaction>>);
+            Invocation.method(#getTransactionsByCategory, [
+              selectedDate,
+              category,
+            ]),
+            returnValue: _i6.Future<List<_i10.Transaction>>.value(
+              <_i10.Transaction>[],
+            ),
+          )
+          as _i6.Future<List<_i10.Transaction>>);
 
   @override
-  _i5.Future<int> deleteTransaction(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteTransaction,
-          [id],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
-
-  @override
-  _i5.Future<int> updateTransaction(_i9.Transaction? transaction) =>
+  _i6.Future<int> deleteTransaction(String? id) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateTransaction,
-          [transaction],
-        ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+            Invocation.method(#deleteTransaction, [id]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<int> updateTransaction(_i10.Transaction? transaction) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateTransaction, [transaction]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+}
+
+/// A class which mocks [FinancialProfileDao].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFinancialProfileDao extends _i1.Mock
+    implements _i12.FinancialProfileDao {
+  MockFinancialProfileDao() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.DatabaseHelper get dbHelper =>
+      (super.noSuchMethod(
+            Invocation.getter(#dbHelper),
+            returnValue: _FakeDatabaseHelper_0(
+              this,
+              Invocation.getter(#dbHelper),
+            ),
+          )
+          as _i2.DatabaseHelper);
+
+  @override
+  _i6.Future<int> saveProfile(_i13.FinancialProfile? profile) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveProfile, [profile]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<_i13.FinancialProfile?> getProfile() =>
+      (super.noSuchMethod(
+            Invocation.method(#getProfile, []),
+            returnValue: _i6.Future<_i13.FinancialProfile?>.value(),
+          )
+          as _i6.Future<_i13.FinancialProfile?>);
+}
+
+/// A class which mocks [GeminiRemoteDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGeminiRemoteDataSource extends _i1.Mock
+    implements _i14.GeminiRemoteDataSource {
+  MockGeminiRemoteDataSource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool get isConfigured =>
+      (super.noSuchMethod(Invocation.getter(#isConfigured), returnValue: false)
+          as bool);
+
+  @override
+  _i6.Future<_i4.FinancialAnalysis> getAnalysis(
+    _i4.FinancialAnalysisArguments? args,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getAnalysis, [args]),
+            returnValue: _i6.Future<_i4.FinancialAnalysis>.value(
+              _FakeFinancialAnalysis_2(
+                this,
+                Invocation.method(#getAnalysis, [args]),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.FinancialAnalysis>);
+}
+
+/// A class which mocks [FinancialAnalysisDao].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFinancialAnalysisDao extends _i1.Mock
+    implements _i15.FinancialAnalysisDao {
+  MockFinancialAnalysisDao() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.DatabaseHelper get dbHelper =>
+      (super.noSuchMethod(
+            Invocation.getter(#dbHelper),
+            returnValue: _FakeDatabaseHelper_0(
+              this,
+              Invocation.getter(#dbHelper),
+            ),
+          )
+          as _i2.DatabaseHelper);
+
+  @override
+  _i6.Future<int> save(_i4.FinancialAnalysis? analysis, String? fingerprint) =>
+      (super.noSuchMethod(
+            Invocation.method(#save, [analysis, fingerprint]),
+            returnValue: _i6.Future<int>.value(0),
+          )
+          as _i6.Future<int>);
+
+  @override
+  _i6.Future<_i4.CachedFinancialAnalysis?> get() =>
+      (super.noSuchMethod(
+            Invocation.method(#get, []),
+            returnValue: _i6.Future<_i4.CachedFinancialAnalysis?>.value(),
+          )
+          as _i6.Future<_i4.CachedFinancialAnalysis?>);
 }

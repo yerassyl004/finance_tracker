@@ -1,5 +1,6 @@
 import 'package:finance_app/app/app_router.dart';
 import 'package:finance_app/app/di.dart';
+import 'package:finance_app/app/services/notification_service.dart';
 import 'package:finance_app/data/data_source/local/database_helper.dart';
 import 'package:finance_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,15 +12,21 @@ import 'app/utils/screem_size.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await DatabaseHelper.instance.database;
   di.initLocators();
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.blue, statusBarBrightness: Brightness.light));
+  // Prepare the notification plugin (channel + timezone db). Runtime permission
+  // is requested later from the presentation layer (see SplashPage).
+  await getIt<NotificationService>().init();
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.blue,
+      statusBarBrightness: Brightness.light,
+    ),
+  );
 
   runApp(const MyApp());
 }
@@ -32,19 +39,20 @@ class MyApp extends StatelessWidget {
     final appRouter = AppRouter();
 
     return ScreenUtilInit(
-        designSize: const Size(DEVICE_WIDTH, DEVICE_HEIGHT),
-        builder: (_, __) {
-          return MaterialApp.router(
-            // onGenerateRoute: RouteGenerator.getRoute,
+      designSize: const Size(DEVICE_WIDTH, DEVICE_HEIGHT),
+      builder: (_, __) {
+        return MaterialApp.router(
+          // onGenerateRoute: RouteGenerator.getRoute,
 
-            // initialRoute: Routes.mainRoute,
-            routerConfig: appRouter.config(),
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
-          );
-        });
+          // initialRoute: Routes.mainRoute,
+          routerConfig: appRouter.config(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+        );
+      },
+    );
   }
 }

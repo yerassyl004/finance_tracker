@@ -12,7 +12,8 @@ part of 'analysis_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$AnalysisData {
@@ -23,7 +24,16 @@ mixin _$AnalysisData {
   double get expenseAmount => throw _privateConstructorUsedError;
   double get incomeAmount => throw _privateConstructorUsedError;
   TypeSpending get selectedType => throw _privateConstructorUsedError;
-  String? get errorMessage => throw _privateConstructorUsedError;
+  String? get errorMessage =>
+      throw _privateConstructorUsedError; // AI insights (Gemini). Kept on the loaded data so the rest of the screen
+  // stays visible while insights load or fail.
+  bool get aiLoading => throw _privateConstructorUsedError;
+  FinancialAnalysis? get aiAnalysis => throw _privateConstructorUsedError;
+  String? get aiError =>
+      throw _privateConstructorUsedError; // Per-category budget ("max") vs. actual spend this month, over-budget
+  // first. Drives the category budgets card and feeds the AI.
+  List<CategoryBudgetProgress> get categoryBudgets =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of AnalysisData
   /// with the given fields replaced by the non-null parameter values.
@@ -35,18 +45,24 @@ mixin _$AnalysisData {
 /// @nodoc
 abstract class $AnalysisDataCopyWith<$Res> {
   factory $AnalysisDataCopyWith(
-          AnalysisData value, $Res Function(AnalysisData) then) =
-      _$AnalysisDataCopyWithImpl<$Res, AnalysisData>;
+    AnalysisData value,
+    $Res Function(AnalysisData) then,
+  ) = _$AnalysisDataCopyWithImpl<$Res, AnalysisData>;
   @useResult
-  $Res call(
-      {DateTime currentMonth,
-      List<Transaction> transactions,
-      List<Segment> segments,
-      List<Analysis> analysis,
-      double expenseAmount,
-      double incomeAmount,
-      TypeSpending selectedType,
-      String? errorMessage});
+  $Res call({
+    DateTime currentMonth,
+    List<Transaction> transactions,
+    List<Segment> segments,
+    List<Analysis> analysis,
+    double expenseAmount,
+    double incomeAmount,
+    TypeSpending selectedType,
+    String? errorMessage,
+    bool aiLoading,
+    FinancialAnalysis? aiAnalysis,
+    String? aiError,
+    List<CategoryBudgetProgress> categoryBudgets,
+  });
 }
 
 /// @nodoc
@@ -72,41 +88,64 @@ class _$AnalysisDataCopyWithImpl<$Res, $Val extends AnalysisData>
     Object? incomeAmount = null,
     Object? selectedType = null,
     Object? errorMessage = freezed,
+    Object? aiLoading = null,
+    Object? aiAnalysis = freezed,
+    Object? aiError = freezed,
+    Object? categoryBudgets = null,
   }) {
-    return _then(_value.copyWith(
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      transactions: null == transactions
-          ? _value.transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<Transaction>,
-      segments: null == segments
-          ? _value.segments
-          : segments // ignore: cast_nullable_to_non_nullable
-              as List<Segment>,
-      analysis: null == analysis
-          ? _value.analysis
-          : analysis // ignore: cast_nullable_to_non_nullable
-              as List<Analysis>,
-      expenseAmount: null == expenseAmount
-          ? _value.expenseAmount
-          : expenseAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      incomeAmount: null == incomeAmount
-          ? _value.incomeAmount
-          : incomeAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      selectedType: null == selectedType
-          ? _value.selectedType
-          : selectedType // ignore: cast_nullable_to_non_nullable
-              as TypeSpending,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            currentMonth: null == currentMonth
+                ? _value.currentMonth
+                : currentMonth // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            transactions: null == transactions
+                ? _value.transactions
+                : transactions // ignore: cast_nullable_to_non_nullable
+                      as List<Transaction>,
+            segments: null == segments
+                ? _value.segments
+                : segments // ignore: cast_nullable_to_non_nullable
+                      as List<Segment>,
+            analysis: null == analysis
+                ? _value.analysis
+                : analysis // ignore: cast_nullable_to_non_nullable
+                      as List<Analysis>,
+            expenseAmount: null == expenseAmount
+                ? _value.expenseAmount
+                : expenseAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            incomeAmount: null == incomeAmount
+                ? _value.incomeAmount
+                : incomeAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            selectedType: null == selectedType
+                ? _value.selectedType
+                : selectedType // ignore: cast_nullable_to_non_nullable
+                      as TypeSpending,
+            errorMessage: freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            aiLoading: null == aiLoading
+                ? _value.aiLoading
+                : aiLoading // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            aiAnalysis: freezed == aiAnalysis
+                ? _value.aiAnalysis
+                : aiAnalysis // ignore: cast_nullable_to_non_nullable
+                      as FinancialAnalysis?,
+            aiError: freezed == aiError
+                ? _value.aiError
+                : aiError // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            categoryBudgets: null == categoryBudgets
+                ? _value.categoryBudgets
+                : categoryBudgets // ignore: cast_nullable_to_non_nullable
+                      as List<CategoryBudgetProgress>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -114,19 +153,25 @@ class _$AnalysisDataCopyWithImpl<$Res, $Val extends AnalysisData>
 abstract class _$$AnalysisDataImplCopyWith<$Res>
     implements $AnalysisDataCopyWith<$Res> {
   factory _$$AnalysisDataImplCopyWith(
-          _$AnalysisDataImpl value, $Res Function(_$AnalysisDataImpl) then) =
-      __$$AnalysisDataImplCopyWithImpl<$Res>;
+    _$AnalysisDataImpl value,
+    $Res Function(_$AnalysisDataImpl) then,
+  ) = __$$AnalysisDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {DateTime currentMonth,
-      List<Transaction> transactions,
-      List<Segment> segments,
-      List<Analysis> analysis,
-      double expenseAmount,
-      double incomeAmount,
-      TypeSpending selectedType,
-      String? errorMessage});
+  $Res call({
+    DateTime currentMonth,
+    List<Transaction> transactions,
+    List<Segment> segments,
+    List<Analysis> analysis,
+    double expenseAmount,
+    double incomeAmount,
+    TypeSpending selectedType,
+    String? errorMessage,
+    bool aiLoading,
+    FinancialAnalysis? aiAnalysis,
+    String? aiError,
+    List<CategoryBudgetProgress> categoryBudgets,
+  });
 }
 
 /// @nodoc
@@ -134,8 +179,9 @@ class __$$AnalysisDataImplCopyWithImpl<$Res>
     extends _$AnalysisDataCopyWithImpl<$Res, _$AnalysisDataImpl>
     implements _$$AnalysisDataImplCopyWith<$Res> {
   __$$AnalysisDataImplCopyWithImpl(
-      _$AnalysisDataImpl _value, $Res Function(_$AnalysisDataImpl) _then)
-      : super(_value, _then);
+    _$AnalysisDataImpl _value,
+    $Res Function(_$AnalysisDataImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisData
   /// with the given fields replaced by the non-null parameter values.
@@ -150,59 +196,86 @@ class __$$AnalysisDataImplCopyWithImpl<$Res>
     Object? incomeAmount = null,
     Object? selectedType = null,
     Object? errorMessage = freezed,
+    Object? aiLoading = null,
+    Object? aiAnalysis = freezed,
+    Object? aiError = freezed,
+    Object? categoryBudgets = null,
   }) {
-    return _then(_$AnalysisDataImpl(
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      transactions: null == transactions
-          ? _value._transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<Transaction>,
-      segments: null == segments
-          ? _value._segments
-          : segments // ignore: cast_nullable_to_non_nullable
-              as List<Segment>,
-      analysis: null == analysis
-          ? _value._analysis
-          : analysis // ignore: cast_nullable_to_non_nullable
-              as List<Analysis>,
-      expenseAmount: null == expenseAmount
-          ? _value.expenseAmount
-          : expenseAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      incomeAmount: null == incomeAmount
-          ? _value.incomeAmount
-          : incomeAmount // ignore: cast_nullable_to_non_nullable
-              as double,
-      selectedType: null == selectedType
-          ? _value.selectedType
-          : selectedType // ignore: cast_nullable_to_non_nullable
-              as TypeSpending,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$AnalysisDataImpl(
+        currentMonth: null == currentMonth
+            ? _value.currentMonth
+            : currentMonth // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        transactions: null == transactions
+            ? _value._transactions
+            : transactions // ignore: cast_nullable_to_non_nullable
+                  as List<Transaction>,
+        segments: null == segments
+            ? _value._segments
+            : segments // ignore: cast_nullable_to_non_nullable
+                  as List<Segment>,
+        analysis: null == analysis
+            ? _value._analysis
+            : analysis // ignore: cast_nullable_to_non_nullable
+                  as List<Analysis>,
+        expenseAmount: null == expenseAmount
+            ? _value.expenseAmount
+            : expenseAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        incomeAmount: null == incomeAmount
+            ? _value.incomeAmount
+            : incomeAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        selectedType: null == selectedType
+            ? _value.selectedType
+            : selectedType // ignore: cast_nullable_to_non_nullable
+                  as TypeSpending,
+        errorMessage: freezed == errorMessage
+            ? _value.errorMessage
+            : errorMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        aiLoading: null == aiLoading
+            ? _value.aiLoading
+            : aiLoading // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        aiAnalysis: freezed == aiAnalysis
+            ? _value.aiAnalysis
+            : aiAnalysis // ignore: cast_nullable_to_non_nullable
+                  as FinancialAnalysis?,
+        aiError: freezed == aiError
+            ? _value.aiError
+            : aiError // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        categoryBudgets: null == categoryBudgets
+            ? _value._categoryBudgets
+            : categoryBudgets // ignore: cast_nullable_to_non_nullable
+                  as List<CategoryBudgetProgress>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
-  const _$AnalysisDataImpl(
-      {required this.currentMonth,
-      required final List<Transaction> transactions,
-      required final List<Segment> segments,
-      final List<Analysis> analysis = const [],
-      this.expenseAmount = 0,
-      this.incomeAmount = 0,
-      this.selectedType = TypeSpending.expense,
-      this.errorMessage})
-      : _transactions = transactions,
-        _segments = segments,
-        _analysis = analysis;
+  const _$AnalysisDataImpl({
+    required this.currentMonth,
+    required final List<Transaction> transactions,
+    required final List<Segment> segments,
+    final List<Analysis> analysis = const [],
+    this.expenseAmount = 0,
+    this.incomeAmount = 0,
+    this.selectedType = TypeSpending.expense,
+    this.errorMessage,
+    this.aiLoading = false,
+    this.aiAnalysis,
+    this.aiError,
+    final List<CategoryBudgetProgress> categoryBudgets = const [],
+  }) : _transactions = transactions,
+       _segments = segments,
+       _analysis = analysis,
+       _categoryBudgets = categoryBudgets;
 
   @override
   final DateTime currentMonth;
@@ -242,10 +315,31 @@ class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
   final TypeSpending selectedType;
   @override
   final String? errorMessage;
+  // AI insights (Gemini). Kept on the loaded data so the rest of the screen
+  // stays visible while insights load or fail.
+  @override
+  @JsonKey()
+  final bool aiLoading;
+  @override
+  final FinancialAnalysis? aiAnalysis;
+  @override
+  final String? aiError;
+  // Per-category budget ("max") vs. actual spend this month, over-budget
+  // first. Drives the category budgets card and feeds the AI.
+  final List<CategoryBudgetProgress> _categoryBudgets;
+  // Per-category budget ("max") vs. actual spend this month, over-budget
+  // first. Drives the category budgets card and feeds the AI.
+  @override
+  @JsonKey()
+  List<CategoryBudgetProgress> get categoryBudgets {
+    if (_categoryBudgets is EqualUnmodifiableListView) return _categoryBudgets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categoryBudgets);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AnalysisData(currentMonth: $currentMonth, transactions: $transactions, segments: $segments, analysis: $analysis, expenseAmount: $expenseAmount, incomeAmount: $incomeAmount, selectedType: $selectedType, errorMessage: $errorMessage)';
+    return 'AnalysisData(currentMonth: $currentMonth, transactions: $transactions, segments: $segments, analysis: $analysis, expenseAmount: $expenseAmount, incomeAmount: $incomeAmount, selectedType: $selectedType, errorMessage: $errorMessage, aiLoading: $aiLoading, aiAnalysis: $aiAnalysis, aiError: $aiError, categoryBudgets: $categoryBudgets)';
   }
 
   @override
@@ -260,7 +354,11 @@ class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
       ..add(DiagnosticsProperty('expenseAmount', expenseAmount))
       ..add(DiagnosticsProperty('incomeAmount', incomeAmount))
       ..add(DiagnosticsProperty('selectedType', selectedType))
-      ..add(DiagnosticsProperty('errorMessage', errorMessage));
+      ..add(DiagnosticsProperty('errorMessage', errorMessage))
+      ..add(DiagnosticsProperty('aiLoading', aiLoading))
+      ..add(DiagnosticsProperty('aiAnalysis', aiAnalysis))
+      ..add(DiagnosticsProperty('aiError', aiError))
+      ..add(DiagnosticsProperty('categoryBudgets', categoryBudgets));
   }
 
   @override
@@ -270,8 +368,10 @@ class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
             other is _$AnalysisDataImpl &&
             (identical(other.currentMonth, currentMonth) ||
                 other.currentMonth == currentMonth) &&
-            const DeepCollectionEquality()
-                .equals(other._transactions, _transactions) &&
+            const DeepCollectionEquality().equals(
+              other._transactions,
+              _transactions,
+            ) &&
             const DeepCollectionEquality().equals(other._segments, _segments) &&
             const DeepCollectionEquality().equals(other._analysis, _analysis) &&
             (identical(other.expenseAmount, expenseAmount) ||
@@ -281,20 +381,34 @@ class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
             (identical(other.selectedType, selectedType) ||
                 other.selectedType == selectedType) &&
             (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.errorMessage == errorMessage) &&
+            (identical(other.aiLoading, aiLoading) ||
+                other.aiLoading == aiLoading) &&
+            (identical(other.aiAnalysis, aiAnalysis) ||
+                other.aiAnalysis == aiAnalysis) &&
+            (identical(other.aiError, aiError) || other.aiError == aiError) &&
+            const DeepCollectionEquality().equals(
+              other._categoryBudgets,
+              _categoryBudgets,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      currentMonth,
-      const DeepCollectionEquality().hash(_transactions),
-      const DeepCollectionEquality().hash(_segments),
-      const DeepCollectionEquality().hash(_analysis),
-      expenseAmount,
-      incomeAmount,
-      selectedType,
-      errorMessage);
+    runtimeType,
+    currentMonth,
+    const DeepCollectionEquality().hash(_transactions),
+    const DeepCollectionEquality().hash(_segments),
+    const DeepCollectionEquality().hash(_analysis),
+    expenseAmount,
+    incomeAmount,
+    selectedType,
+    errorMessage,
+    aiLoading,
+    aiAnalysis,
+    aiError,
+    const DeepCollectionEquality().hash(_categoryBudgets),
+  );
 
   /// Create a copy of AnalysisData
   /// with the given fields replaced by the non-null parameter values.
@@ -306,15 +420,20 @@ class _$AnalysisDataImpl with DiagnosticableTreeMixin implements _AnalysisData {
 }
 
 abstract class _AnalysisData implements AnalysisData {
-  const factory _AnalysisData(
-      {required final DateTime currentMonth,
-      required final List<Transaction> transactions,
-      required final List<Segment> segments,
-      final List<Analysis> analysis,
-      final double expenseAmount,
-      final double incomeAmount,
-      final TypeSpending selectedType,
-      final String? errorMessage}) = _$AnalysisDataImpl;
+  const factory _AnalysisData({
+    required final DateTime currentMonth,
+    required final List<Transaction> transactions,
+    required final List<Segment> segments,
+    final List<Analysis> analysis,
+    final double expenseAmount,
+    final double incomeAmount,
+    final TypeSpending selectedType,
+    final String? errorMessage,
+    final bool aiLoading,
+    final FinancialAnalysis? aiAnalysis,
+    final String? aiError,
+    final List<CategoryBudgetProgress> categoryBudgets,
+  }) = _$AnalysisDataImpl;
 
   @override
   DateTime get currentMonth;
@@ -331,7 +450,17 @@ abstract class _AnalysisData implements AnalysisData {
   @override
   TypeSpending get selectedType;
   @override
-  String? get errorMessage;
+  String? get errorMessage; // AI insights (Gemini). Kept on the loaded data so the rest of the screen
+  // stays visible while insights load or fail.
+  @override
+  bool get aiLoading;
+  @override
+  FinancialAnalysis? get aiAnalysis;
+  @override
+  String? get aiError; // Per-category budget ("max") vs. actual spend this month, over-budget
+  // first. Drives the category budgets card and feeds the AI.
+  @override
+  List<CategoryBudgetProgress> get categoryBudgets;
 
   /// Create a copy of AnalysisData
   /// with the given fields replaced by the non-null parameter values.
@@ -347,50 +476,58 @@ mixin _$AnalysisEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() loadTransactions,
     required TResult Function(DateTime month, TypeSpending typeSpending)
-        updateTransactions,
-  }) =>
-      throw _privateConstructorUsedError;
+    updateTransactions,
+    required TResult Function(bool forceRefresh) loadAiInsights,
+    required TResult Function(String categoryId, double value)
+    updateCategoryBudget,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadTransactions,
     TResult? Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
-  }) =>
-      throw _privateConstructorUsedError;
+    updateTransactions,
+    TResult? Function(bool forceRefresh)? loadAiInsights,
+    TResult? Function(String categoryId, double value)? updateCategoryBudget,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadTransactions,
     TResult Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
+    updateTransactions,
+    TResult Function(bool forceRefresh)? loadAiInsights,
+    TResult Function(String categoryId, double value)? updateCategoryBudget,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactions value) loadTransactions,
     required TResult Function(UpdateTransactions value) updateTransactions,
-  }) =>
-      throw _privateConstructorUsedError;
+    required TResult Function(LoadAiInsights value) loadAiInsights,
+    required TResult Function(UpdateCategoryBudget value) updateCategoryBudget,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadTransactions value)? loadTransactions,
     TResult? Function(UpdateTransactions value)? updateTransactions,
-  }) =>
-      throw _privateConstructorUsedError;
+    TResult? Function(LoadAiInsights value)? loadAiInsights,
+    TResult? Function(UpdateCategoryBudget value)? updateCategoryBudget,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadTransactions value)? loadTransactions,
     TResult Function(UpdateTransactions value)? updateTransactions,
+    TResult Function(LoadAiInsights value)? loadAiInsights,
+    TResult Function(UpdateCategoryBudget value)? updateCategoryBudget,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AnalysisEventCopyWith<$Res> {
   factory $AnalysisEventCopyWith(
-          AnalysisEvent value, $Res Function(AnalysisEvent) then) =
-      _$AnalysisEventCopyWithImpl<$Res, AnalysisEvent>;
+    AnalysisEvent value,
+    $Res Function(AnalysisEvent) then,
+  ) = _$AnalysisEventCopyWithImpl<$Res, AnalysisEvent>;
 }
 
 /// @nodoc
@@ -409,18 +546,20 @@ class _$AnalysisEventCopyWithImpl<$Res, $Val extends AnalysisEvent>
 
 /// @nodoc
 abstract class _$$LoadTransactionsImplCopyWith<$Res> {
-  factory _$$LoadTransactionsImplCopyWith(_$LoadTransactionsImpl value,
-          $Res Function(_$LoadTransactionsImpl) then) =
-      __$$LoadTransactionsImplCopyWithImpl<$Res>;
+  factory _$$LoadTransactionsImplCopyWith(
+    _$LoadTransactionsImpl value,
+    $Res Function(_$LoadTransactionsImpl) then,
+  ) = __$$LoadTransactionsImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadTransactionsImplCopyWithImpl<$Res>
     extends _$AnalysisEventCopyWithImpl<$Res, _$LoadTransactionsImpl>
     implements _$$LoadTransactionsImplCopyWith<$Res> {
-  __$$LoadTransactionsImplCopyWithImpl(_$LoadTransactionsImpl _value,
-      $Res Function(_$LoadTransactionsImpl) _then)
-      : super(_value, _then);
+  __$$LoadTransactionsImplCopyWithImpl(
+    _$LoadTransactionsImpl _value,
+    $Res Function(_$LoadTransactionsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -459,7 +598,10 @@ class _$LoadTransactionsImpl
   TResult when<TResult extends Object?>({
     required TResult Function() loadTransactions,
     required TResult Function(DateTime month, TypeSpending typeSpending)
-        updateTransactions,
+    updateTransactions,
+    required TResult Function(bool forceRefresh) loadAiInsights,
+    required TResult Function(String categoryId, double value)
+    updateCategoryBudget,
   }) {
     return loadTransactions();
   }
@@ -469,7 +611,9 @@ class _$LoadTransactionsImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadTransactions,
     TResult? Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
+    updateTransactions,
+    TResult? Function(bool forceRefresh)? loadAiInsights,
+    TResult? Function(String categoryId, double value)? updateCategoryBudget,
   }) {
     return loadTransactions?.call();
   }
@@ -479,7 +623,9 @@ class _$LoadTransactionsImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadTransactions,
     TResult Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
+    updateTransactions,
+    TResult Function(bool forceRefresh)? loadAiInsights,
+    TResult Function(String categoryId, double value)? updateCategoryBudget,
     required TResult orElse(),
   }) {
     if (loadTransactions != null) {
@@ -493,6 +639,8 @@ class _$LoadTransactionsImpl
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactions value) loadTransactions,
     required TResult Function(UpdateTransactions value) updateTransactions,
+    required TResult Function(LoadAiInsights value) loadAiInsights,
+    required TResult Function(UpdateCategoryBudget value) updateCategoryBudget,
   }) {
     return loadTransactions(this);
   }
@@ -502,6 +650,8 @@ class _$LoadTransactionsImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadTransactions value)? loadTransactions,
     TResult? Function(UpdateTransactions value)? updateTransactions,
+    TResult? Function(LoadAiInsights value)? loadAiInsights,
+    TResult? Function(UpdateCategoryBudget value)? updateCategoryBudget,
   }) {
     return loadTransactions?.call(this);
   }
@@ -511,6 +661,8 @@ class _$LoadTransactionsImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadTransactions value)? loadTransactions,
     TResult Function(UpdateTransactions value)? updateTransactions,
+    TResult Function(LoadAiInsights value)? loadAiInsights,
+    TResult Function(UpdateCategoryBudget value)? updateCategoryBudget,
     required TResult orElse(),
   }) {
     if (loadTransactions != null) {
@@ -526,9 +678,10 @@ abstract class LoadTransactions implements AnalysisEvent {
 
 /// @nodoc
 abstract class _$$UpdateTransactionsImplCopyWith<$Res> {
-  factory _$$UpdateTransactionsImplCopyWith(_$UpdateTransactionsImpl value,
-          $Res Function(_$UpdateTransactionsImpl) then) =
-      __$$UpdateTransactionsImplCopyWithImpl<$Res>;
+  factory _$$UpdateTransactionsImplCopyWith(
+    _$UpdateTransactionsImpl value,
+    $Res Function(_$UpdateTransactionsImpl) then,
+  ) = __$$UpdateTransactionsImplCopyWithImpl<$Res>;
   @useResult
   $Res call({DateTime month, TypeSpending typeSpending});
 }
@@ -537,28 +690,28 @@ abstract class _$$UpdateTransactionsImplCopyWith<$Res> {
 class __$$UpdateTransactionsImplCopyWithImpl<$Res>
     extends _$AnalysisEventCopyWithImpl<$Res, _$UpdateTransactionsImpl>
     implements _$$UpdateTransactionsImplCopyWith<$Res> {
-  __$$UpdateTransactionsImplCopyWithImpl(_$UpdateTransactionsImpl _value,
-      $Res Function(_$UpdateTransactionsImpl) _then)
-      : super(_value, _then);
+  __$$UpdateTransactionsImplCopyWithImpl(
+    _$UpdateTransactionsImpl _value,
+    $Res Function(_$UpdateTransactionsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? month = null,
-    Object? typeSpending = null,
-  }) {
-    return _then(_$UpdateTransactionsImpl(
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      typeSpending: null == typeSpending
-          ? _value.typeSpending
-          : typeSpending // ignore: cast_nullable_to_non_nullable
-              as TypeSpending,
-    ));
+  $Res call({Object? month = null, Object? typeSpending = null}) {
+    return _then(
+      _$UpdateTransactionsImpl(
+        month: null == month
+            ? _value.month
+            : month // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        typeSpending: null == typeSpending
+            ? _value.typeSpending
+            : typeSpending // ignore: cast_nullable_to_non_nullable
+                  as TypeSpending,
+      ),
+    );
   }
 }
 
@@ -567,8 +720,10 @@ class __$$UpdateTransactionsImplCopyWithImpl<$Res>
 class _$UpdateTransactionsImpl
     with DiagnosticableTreeMixin
     implements UpdateTransactions {
-  const _$UpdateTransactionsImpl(
-      {required this.month, required this.typeSpending});
+  const _$UpdateTransactionsImpl({
+    required this.month,
+    required this.typeSpending,
+  });
 
   @override
   final DateTime month;
@@ -609,14 +764,19 @@ class _$UpdateTransactionsImpl
   @pragma('vm:prefer-inline')
   _$$UpdateTransactionsImplCopyWith<_$UpdateTransactionsImpl> get copyWith =>
       __$$UpdateTransactionsImplCopyWithImpl<_$UpdateTransactionsImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadTransactions,
     required TResult Function(DateTime month, TypeSpending typeSpending)
-        updateTransactions,
+    updateTransactions,
+    required TResult Function(bool forceRefresh) loadAiInsights,
+    required TResult Function(String categoryId, double value)
+    updateCategoryBudget,
   }) {
     return updateTransactions(month, typeSpending);
   }
@@ -626,7 +786,9 @@ class _$UpdateTransactionsImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadTransactions,
     TResult? Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
+    updateTransactions,
+    TResult? Function(bool forceRefresh)? loadAiInsights,
+    TResult? Function(String categoryId, double value)? updateCategoryBudget,
   }) {
     return updateTransactions?.call(month, typeSpending);
   }
@@ -636,7 +798,9 @@ class _$UpdateTransactionsImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadTransactions,
     TResult Function(DateTime month, TypeSpending typeSpending)?
-        updateTransactions,
+    updateTransactions,
+    TResult Function(bool forceRefresh)? loadAiInsights,
+    TResult Function(String categoryId, double value)? updateCategoryBudget,
     required TResult orElse(),
   }) {
     if (updateTransactions != null) {
@@ -650,6 +814,8 @@ class _$UpdateTransactionsImpl
   TResult map<TResult extends Object?>({
     required TResult Function(LoadTransactions value) loadTransactions,
     required TResult Function(UpdateTransactions value) updateTransactions,
+    required TResult Function(LoadAiInsights value) loadAiInsights,
+    required TResult Function(UpdateCategoryBudget value) updateCategoryBudget,
   }) {
     return updateTransactions(this);
   }
@@ -659,6 +825,8 @@ class _$UpdateTransactionsImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadTransactions value)? loadTransactions,
     TResult? Function(UpdateTransactions value)? updateTransactions,
+    TResult? Function(LoadAiInsights value)? loadAiInsights,
+    TResult? Function(UpdateCategoryBudget value)? updateCategoryBudget,
   }) {
     return updateTransactions?.call(this);
   }
@@ -668,6 +836,8 @@ class _$UpdateTransactionsImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadTransactions value)? loadTransactions,
     TResult Function(UpdateTransactions value)? updateTransactions,
+    TResult Function(LoadAiInsights value)? loadAiInsights,
+    TResult Function(UpdateCategoryBudget value)? updateCategoryBudget,
     required TResult orElse(),
   }) {
     if (updateTransactions != null) {
@@ -678,9 +848,10 @@ class _$UpdateTransactionsImpl
 }
 
 abstract class UpdateTransactions implements AnalysisEvent {
-  const factory UpdateTransactions(
-      {required final DateTime month,
-      required final TypeSpending typeSpending}) = _$UpdateTransactionsImpl;
+  const factory UpdateTransactions({
+    required final DateTime month,
+    required final TypeSpending typeSpending,
+  }) = _$UpdateTransactionsImpl;
 
   DateTime get month;
   TypeSpending get typeSpending;
@@ -693,6 +864,365 @@ abstract class UpdateTransactions implements AnalysisEvent {
 }
 
 /// @nodoc
+abstract class _$$LoadAiInsightsImplCopyWith<$Res> {
+  factory _$$LoadAiInsightsImplCopyWith(
+    _$LoadAiInsightsImpl value,
+    $Res Function(_$LoadAiInsightsImpl) then,
+  ) = __$$LoadAiInsightsImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool forceRefresh});
+}
+
+/// @nodoc
+class __$$LoadAiInsightsImplCopyWithImpl<$Res>
+    extends _$AnalysisEventCopyWithImpl<$Res, _$LoadAiInsightsImpl>
+    implements _$$LoadAiInsightsImplCopyWith<$Res> {
+  __$$LoadAiInsightsImplCopyWithImpl(
+    _$LoadAiInsightsImpl _value,
+    $Res Function(_$LoadAiInsightsImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? forceRefresh = null}) {
+    return _then(
+      _$LoadAiInsightsImpl(
+        forceRefresh: null == forceRefresh
+            ? _value.forceRefresh
+            : forceRefresh // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$LoadAiInsightsImpl
+    with DiagnosticableTreeMixin
+    implements LoadAiInsights {
+  const _$LoadAiInsightsImpl({this.forceRefresh = false});
+
+  @override
+  @JsonKey()
+  final bool forceRefresh;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AnalysisEvent.loadAiInsights(forceRefresh: $forceRefresh)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AnalysisEvent.loadAiInsights'))
+      ..add(DiagnosticsProperty('forceRefresh', forceRefresh));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadAiInsightsImpl &&
+            (identical(other.forceRefresh, forceRefresh) ||
+                other.forceRefresh == forceRefresh));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, forceRefresh);
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadAiInsightsImplCopyWith<_$LoadAiInsightsImpl> get copyWith =>
+      __$$LoadAiInsightsImplCopyWithImpl<_$LoadAiInsightsImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadTransactions,
+    required TResult Function(DateTime month, TypeSpending typeSpending)
+    updateTransactions,
+    required TResult Function(bool forceRefresh) loadAiInsights,
+    required TResult Function(String categoryId, double value)
+    updateCategoryBudget,
+  }) {
+    return loadAiInsights(forceRefresh);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadTransactions,
+    TResult? Function(DateTime month, TypeSpending typeSpending)?
+    updateTransactions,
+    TResult? Function(bool forceRefresh)? loadAiInsights,
+    TResult? Function(String categoryId, double value)? updateCategoryBudget,
+  }) {
+    return loadAiInsights?.call(forceRefresh);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadTransactions,
+    TResult Function(DateTime month, TypeSpending typeSpending)?
+    updateTransactions,
+    TResult Function(bool forceRefresh)? loadAiInsights,
+    TResult Function(String categoryId, double value)? updateCategoryBudget,
+    required TResult orElse(),
+  }) {
+    if (loadAiInsights != null) {
+      return loadAiInsights(forceRefresh);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadTransactions value) loadTransactions,
+    required TResult Function(UpdateTransactions value) updateTransactions,
+    required TResult Function(LoadAiInsights value) loadAiInsights,
+    required TResult Function(UpdateCategoryBudget value) updateCategoryBudget,
+  }) {
+    return loadAiInsights(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadTransactions value)? loadTransactions,
+    TResult? Function(UpdateTransactions value)? updateTransactions,
+    TResult? Function(LoadAiInsights value)? loadAiInsights,
+    TResult? Function(UpdateCategoryBudget value)? updateCategoryBudget,
+  }) {
+    return loadAiInsights?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadTransactions value)? loadTransactions,
+    TResult Function(UpdateTransactions value)? updateTransactions,
+    TResult Function(LoadAiInsights value)? loadAiInsights,
+    TResult Function(UpdateCategoryBudget value)? updateCategoryBudget,
+    required TResult orElse(),
+  }) {
+    if (loadAiInsights != null) {
+      return loadAiInsights(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadAiInsights implements AnalysisEvent {
+  const factory LoadAiInsights({final bool forceRefresh}) =
+      _$LoadAiInsightsImpl;
+
+  bool get forceRefresh;
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadAiInsightsImplCopyWith<_$LoadAiInsightsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UpdateCategoryBudgetImplCopyWith<$Res> {
+  factory _$$UpdateCategoryBudgetImplCopyWith(
+    _$UpdateCategoryBudgetImpl value,
+    $Res Function(_$UpdateCategoryBudgetImpl) then,
+  ) = __$$UpdateCategoryBudgetImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String categoryId, double value});
+}
+
+/// @nodoc
+class __$$UpdateCategoryBudgetImplCopyWithImpl<$Res>
+    extends _$AnalysisEventCopyWithImpl<$Res, _$UpdateCategoryBudgetImpl>
+    implements _$$UpdateCategoryBudgetImplCopyWith<$Res> {
+  __$$UpdateCategoryBudgetImplCopyWithImpl(
+    _$UpdateCategoryBudgetImpl _value,
+    $Res Function(_$UpdateCategoryBudgetImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? categoryId = null, Object? value = null}) {
+    return _then(
+      _$UpdateCategoryBudgetImpl(
+        null == categoryId
+            ? _value.categoryId
+            : categoryId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        null == value
+            ? _value.value
+            : value // ignore: cast_nullable_to_non_nullable
+                  as double,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$UpdateCategoryBudgetImpl
+    with DiagnosticableTreeMixin
+    implements UpdateCategoryBudget {
+  const _$UpdateCategoryBudgetImpl(this.categoryId, this.value);
+
+  @override
+  final String categoryId;
+  @override
+  final double value;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AnalysisEvent.updateCategoryBudget(categoryId: $categoryId, value: $value)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AnalysisEvent.updateCategoryBudget'))
+      ..add(DiagnosticsProperty('categoryId', categoryId))
+      ..add(DiagnosticsProperty('value', value));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateCategoryBudgetImpl &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, categoryId, value);
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateCategoryBudgetImplCopyWith<_$UpdateCategoryBudgetImpl>
+  get copyWith =>
+      __$$UpdateCategoryBudgetImplCopyWithImpl<_$UpdateCategoryBudgetImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadTransactions,
+    required TResult Function(DateTime month, TypeSpending typeSpending)
+    updateTransactions,
+    required TResult Function(bool forceRefresh) loadAiInsights,
+    required TResult Function(String categoryId, double value)
+    updateCategoryBudget,
+  }) {
+    return updateCategoryBudget(categoryId, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadTransactions,
+    TResult? Function(DateTime month, TypeSpending typeSpending)?
+    updateTransactions,
+    TResult? Function(bool forceRefresh)? loadAiInsights,
+    TResult? Function(String categoryId, double value)? updateCategoryBudget,
+  }) {
+    return updateCategoryBudget?.call(categoryId, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadTransactions,
+    TResult Function(DateTime month, TypeSpending typeSpending)?
+    updateTransactions,
+    TResult Function(bool forceRefresh)? loadAiInsights,
+    TResult Function(String categoryId, double value)? updateCategoryBudget,
+    required TResult orElse(),
+  }) {
+    if (updateCategoryBudget != null) {
+      return updateCategoryBudget(categoryId, value);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadTransactions value) loadTransactions,
+    required TResult Function(UpdateTransactions value) updateTransactions,
+    required TResult Function(LoadAiInsights value) loadAiInsights,
+    required TResult Function(UpdateCategoryBudget value) updateCategoryBudget,
+  }) {
+    return updateCategoryBudget(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadTransactions value)? loadTransactions,
+    TResult? Function(UpdateTransactions value)? updateTransactions,
+    TResult? Function(LoadAiInsights value)? loadAiInsights,
+    TResult? Function(UpdateCategoryBudget value)? updateCategoryBudget,
+  }) {
+    return updateCategoryBudget?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadTransactions value)? loadTransactions,
+    TResult Function(UpdateTransactions value)? updateTransactions,
+    TResult Function(LoadAiInsights value)? loadAiInsights,
+    TResult Function(UpdateCategoryBudget value)? updateCategoryBudget,
+    required TResult orElse(),
+  }) {
+    if (updateCategoryBudget != null) {
+      return updateCategoryBudget(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateCategoryBudget implements AnalysisEvent {
+  const factory UpdateCategoryBudget(
+    final String categoryId,
+    final double value,
+  ) = _$UpdateCategoryBudgetImpl;
+
+  String get categoryId;
+  double get value;
+
+  /// Create a copy of AnalysisEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateCategoryBudgetImplCopyWith<_$UpdateCategoryBudgetImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$AnalysisState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -700,16 +1230,14 @@ mixin _$AnalysisState {
     required TResult Function(AnalysisData data) loading,
     required TResult Function(AnalysisData data) loaded,
     required TResult Function(String message) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function(AnalysisData data)? loading,
     TResult? Function(AnalysisData data)? loaded,
     TResult? Function(String message)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -717,24 +1245,21 @@ mixin _$AnalysisState {
     TResult Function(AnalysisData data)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AnalysisInitial value) initial,
     required TResult Function(AnalysisLoading value) loading,
     required TResult Function(AnalysisLoaded value) loaded,
     required TResult Function(AnalysisError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AnalysisInitial value)? initial,
     TResult? Function(AnalysisLoading value)? loading,
     TResult? Function(AnalysisLoaded value)? loaded,
     TResult? Function(AnalysisError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AnalysisInitial value)? initial,
@@ -742,15 +1267,15 @@ mixin _$AnalysisState {
     TResult Function(AnalysisLoaded value)? loaded,
     TResult Function(AnalysisError value)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AnalysisStateCopyWith<$Res> {
   factory $AnalysisStateCopyWith(
-          AnalysisState value, $Res Function(AnalysisState) then) =
-      _$AnalysisStateCopyWithImpl<$Res, AnalysisState>;
+    AnalysisState value,
+    $Res Function(AnalysisState) then,
+  ) = _$AnalysisStateCopyWithImpl<$Res, AnalysisState>;
 }
 
 /// @nodoc
@@ -769,9 +1294,10 @@ class _$AnalysisStateCopyWithImpl<$Res, $Val extends AnalysisState>
 
 /// @nodoc
 abstract class _$$AnalysisInitialImplCopyWith<$Res> {
-  factory _$$AnalysisInitialImplCopyWith(_$AnalysisInitialImpl value,
-          $Res Function(_$AnalysisInitialImpl) then) =
-      __$$AnalysisInitialImplCopyWithImpl<$Res>;
+  factory _$$AnalysisInitialImplCopyWith(
+    _$AnalysisInitialImpl value,
+    $Res Function(_$AnalysisInitialImpl) then,
+  ) = __$$AnalysisInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -779,8 +1305,9 @@ class __$$AnalysisInitialImplCopyWithImpl<$Res>
     extends _$AnalysisStateCopyWithImpl<$Res, _$AnalysisInitialImpl>
     implements _$$AnalysisInitialImplCopyWith<$Res> {
   __$$AnalysisInitialImplCopyWithImpl(
-      _$AnalysisInitialImpl _value, $Res Function(_$AnalysisInitialImpl) _then)
-      : super(_value, _then);
+    _$AnalysisInitialImpl _value,
+    $Res Function(_$AnalysisInitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisState
   /// with the given fields replaced by the non-null parameter values.
@@ -894,9 +1421,10 @@ abstract class AnalysisInitial implements AnalysisState {
 
 /// @nodoc
 abstract class _$$AnalysisLoadingImplCopyWith<$Res> {
-  factory _$$AnalysisLoadingImplCopyWith(_$AnalysisLoadingImpl value,
-          $Res Function(_$AnalysisLoadingImpl) then) =
-      __$$AnalysisLoadingImplCopyWithImpl<$Res>;
+  factory _$$AnalysisLoadingImplCopyWith(
+    _$AnalysisLoadingImpl value,
+    $Res Function(_$AnalysisLoadingImpl) then,
+  ) = __$$AnalysisLoadingImplCopyWithImpl<$Res>;
   @useResult
   $Res call({AnalysisData data});
 
@@ -908,22 +1436,23 @@ class __$$AnalysisLoadingImplCopyWithImpl<$Res>
     extends _$AnalysisStateCopyWithImpl<$Res, _$AnalysisLoadingImpl>
     implements _$$AnalysisLoadingImplCopyWith<$Res> {
   __$$AnalysisLoadingImplCopyWithImpl(
-      _$AnalysisLoadingImpl _value, $Res Function(_$AnalysisLoadingImpl) _then)
-      : super(_value, _then);
+    _$AnalysisLoadingImpl _value,
+    $Res Function(_$AnalysisLoadingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$AnalysisLoadingImpl(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as AnalysisData,
-    ));
+  $Res call({Object? data = null}) {
+    return _then(
+      _$AnalysisLoadingImpl(
+        data: null == data
+            ? _value.data
+            : data // ignore: cast_nullable_to_non_nullable
+                  as AnalysisData,
+      ),
+    );
   }
 
   /// Create a copy of AnalysisState
@@ -978,7 +1507,9 @@ class _$AnalysisLoadingImpl
   @pragma('vm:prefer-inline')
   _$$AnalysisLoadingImplCopyWith<_$AnalysisLoadingImpl> get copyWith =>
       __$$AnalysisLoadingImplCopyWithImpl<_$AnalysisLoadingImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -1070,9 +1601,10 @@ abstract class AnalysisLoading implements AnalysisState {
 
 /// @nodoc
 abstract class _$$AnalysisLoadedImplCopyWith<$Res> {
-  factory _$$AnalysisLoadedImplCopyWith(_$AnalysisLoadedImpl value,
-          $Res Function(_$AnalysisLoadedImpl) then) =
-      __$$AnalysisLoadedImplCopyWithImpl<$Res>;
+  factory _$$AnalysisLoadedImplCopyWith(
+    _$AnalysisLoadedImpl value,
+    $Res Function(_$AnalysisLoadedImpl) then,
+  ) = __$$AnalysisLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({AnalysisData data});
 
@@ -1084,22 +1616,23 @@ class __$$AnalysisLoadedImplCopyWithImpl<$Res>
     extends _$AnalysisStateCopyWithImpl<$Res, _$AnalysisLoadedImpl>
     implements _$$AnalysisLoadedImplCopyWith<$Res> {
   __$$AnalysisLoadedImplCopyWithImpl(
-      _$AnalysisLoadedImpl _value, $Res Function(_$AnalysisLoadedImpl) _then)
-      : super(_value, _then);
+    _$AnalysisLoadedImpl _value,
+    $Res Function(_$AnalysisLoadedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$AnalysisLoadedImpl(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as AnalysisData,
-    ));
+  $Res call({Object? data = null}) {
+    return _then(
+      _$AnalysisLoadedImpl(
+        data: null == data
+            ? _value.data
+            : data // ignore: cast_nullable_to_non_nullable
+                  as AnalysisData,
+      ),
+    );
   }
 
   /// Create a copy of AnalysisState
@@ -1154,7 +1687,9 @@ class _$AnalysisLoadedImpl
   @pragma('vm:prefer-inline')
   _$$AnalysisLoadedImplCopyWith<_$AnalysisLoadedImpl> get copyWith =>
       __$$AnalysisLoadedImplCopyWithImpl<_$AnalysisLoadedImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -1247,8 +1782,9 @@ abstract class AnalysisLoaded implements AnalysisState {
 /// @nodoc
 abstract class _$$AnalysisErrorImplCopyWith<$Res> {
   factory _$$AnalysisErrorImplCopyWith(
-          _$AnalysisErrorImpl value, $Res Function(_$AnalysisErrorImpl) then) =
-      __$$AnalysisErrorImplCopyWithImpl<$Res>;
+    _$AnalysisErrorImpl value,
+    $Res Function(_$AnalysisErrorImpl) then,
+  ) = __$$AnalysisErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
@@ -1258,22 +1794,23 @@ class __$$AnalysisErrorImplCopyWithImpl<$Res>
     extends _$AnalysisStateCopyWithImpl<$Res, _$AnalysisErrorImpl>
     implements _$$AnalysisErrorImplCopyWith<$Res> {
   __$$AnalysisErrorImplCopyWithImpl(
-      _$AnalysisErrorImpl _value, $Res Function(_$AnalysisErrorImpl) _then)
-      : super(_value, _then);
+    _$AnalysisErrorImpl _value,
+    $Res Function(_$AnalysisErrorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnalysisState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$AnalysisErrorImpl(
-      null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? message = null}) {
+    return _then(
+      _$AnalysisErrorImpl(
+        null == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 

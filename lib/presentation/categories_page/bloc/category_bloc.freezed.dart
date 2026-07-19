@@ -12,7 +12,8 @@ part of 'category_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CategoryEvent {
@@ -20,47 +21,42 @@ mixin _$CategoryEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() loadAccounts,
     required TResult Function(Category account) deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadAccounts,
     TResult? Function(Category account)? deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadAccounts,
     TResult Function(Category account)? deleteAccount,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadCategory value) loadAccounts,
     required TResult Function(DeleteCategory value) deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadCategory value)? loadAccounts,
     TResult? Function(DeleteCategory value)? deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadCategory value)? loadAccounts,
     TResult Function(DeleteCategory value)? deleteAccount,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CategoryEventCopyWith<$Res> {
   factory $CategoryEventCopyWith(
-          CategoryEvent value, $Res Function(CategoryEvent) then) =
-      _$CategoryEventCopyWithImpl<$Res, CategoryEvent>;
+    CategoryEvent value,
+    $Res Function(CategoryEvent) then,
+  ) = _$CategoryEventCopyWithImpl<$Res, CategoryEvent>;
 }
 
 /// @nodoc
@@ -80,8 +76,9 @@ class _$CategoryEventCopyWithImpl<$Res, $Val extends CategoryEvent>
 /// @nodoc
 abstract class _$$LoadCategoryImplCopyWith<$Res> {
   factory _$$LoadCategoryImplCopyWith(
-          _$LoadCategoryImpl value, $Res Function(_$LoadCategoryImpl) then) =
-      __$$LoadCategoryImplCopyWithImpl<$Res>;
+    _$LoadCategoryImpl value,
+    $Res Function(_$LoadCategoryImpl) then,
+  ) = __$$LoadCategoryImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -89,8 +86,9 @@ class __$$LoadCategoryImplCopyWithImpl<$Res>
     extends _$CategoryEventCopyWithImpl<$Res, _$LoadCategoryImpl>
     implements _$$LoadCategoryImplCopyWith<$Res> {
   __$$LoadCategoryImplCopyWithImpl(
-      _$LoadCategoryImpl _value, $Res Function(_$LoadCategoryImpl) _then)
-      : super(_value, _then);
+    _$LoadCategoryImpl _value,
+    $Res Function(_$LoadCategoryImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -184,9 +182,10 @@ abstract class LoadCategory implements CategoryEvent {
 
 /// @nodoc
 abstract class _$$DeleteCategoryImplCopyWith<$Res> {
-  factory _$$DeleteCategoryImplCopyWith(_$DeleteCategoryImpl value,
-          $Res Function(_$DeleteCategoryImpl) then) =
-      __$$DeleteCategoryImplCopyWithImpl<$Res>;
+  factory _$$DeleteCategoryImplCopyWith(
+    _$DeleteCategoryImpl value,
+    $Res Function(_$DeleteCategoryImpl) then,
+  ) = __$$DeleteCategoryImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Category account});
 }
@@ -196,22 +195,23 @@ class __$$DeleteCategoryImplCopyWithImpl<$Res>
     extends _$CategoryEventCopyWithImpl<$Res, _$DeleteCategoryImpl>
     implements _$$DeleteCategoryImplCopyWith<$Res> {
   __$$DeleteCategoryImplCopyWithImpl(
-      _$DeleteCategoryImpl _value, $Res Function(_$DeleteCategoryImpl) _then)
-      : super(_value, _then);
+    _$DeleteCategoryImpl _value,
+    $Res Function(_$DeleteCategoryImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? account = null,
-  }) {
-    return _then(_$DeleteCategoryImpl(
-      null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Category,
-    ));
+  $Res call({Object? account = null}) {
+    return _then(
+      _$DeleteCategoryImpl(
+        null == account
+            ? _value.account
+            : account // ignore: cast_nullable_to_non_nullable
+                  as Category,
+      ),
+    );
   }
 }
 
@@ -246,7 +246,9 @@ class _$DeleteCategoryImpl implements DeleteCategory {
   @pragma('vm:prefer-inline')
   _$$DeleteCategoryImplCopyWith<_$DeleteCategoryImpl> get copyWith =>
       __$$DeleteCategoryImplCopyWithImpl<_$DeleteCategoryImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -330,18 +332,16 @@ mixin _$CategoryState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Category> income, List<Category> expense)
-        loaded,
+    loaded,
     required TResult Function(String message) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Category> income, List<Category> expense)? loaded,
     TResult? Function(String message)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -349,24 +349,21 @@ mixin _$CategoryState {
     TResult Function(List<Category> income, List<Category> expense)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CategoryInitial value) initial,
     required TResult Function(CategoryLoading value) loading,
     required TResult Function(CategoryLoaded value) loaded,
     required TResult Function(CategoryError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(CategoryInitial value)? initial,
     TResult? Function(CategoryLoading value)? loading,
     TResult? Function(CategoryLoaded value)? loaded,
     TResult? Function(CategoryError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CategoryInitial value)? initial,
@@ -374,15 +371,15 @@ mixin _$CategoryState {
     TResult Function(CategoryLoaded value)? loaded,
     TResult Function(CategoryError value)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CategoryStateCopyWith<$Res> {
   factory $CategoryStateCopyWith(
-          CategoryState value, $Res Function(CategoryState) then) =
-      _$CategoryStateCopyWithImpl<$Res, CategoryState>;
+    CategoryState value,
+    $Res Function(CategoryState) then,
+  ) = _$CategoryStateCopyWithImpl<$Res, CategoryState>;
 }
 
 /// @nodoc
@@ -401,9 +398,10 @@ class _$CategoryStateCopyWithImpl<$Res, $Val extends CategoryState>
 
 /// @nodoc
 abstract class _$$CategoryInitialImplCopyWith<$Res> {
-  factory _$$CategoryInitialImplCopyWith(_$CategoryInitialImpl value,
-          $Res Function(_$CategoryInitialImpl) then) =
-      __$$CategoryInitialImplCopyWithImpl<$Res>;
+  factory _$$CategoryInitialImplCopyWith(
+    _$CategoryInitialImpl value,
+    $Res Function(_$CategoryInitialImpl) then,
+  ) = __$$CategoryInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -411,8 +409,9 @@ class __$$CategoryInitialImplCopyWithImpl<$Res>
     extends _$CategoryStateCopyWithImpl<$Res, _$CategoryInitialImpl>
     implements _$$CategoryInitialImplCopyWith<$Res> {
   __$$CategoryInitialImplCopyWithImpl(
-      _$CategoryInitialImpl _value, $Res Function(_$CategoryInitialImpl) _then)
-      : super(_value, _then);
+    _$CategoryInitialImpl _value,
+    $Res Function(_$CategoryInitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -443,7 +442,7 @@ class _$CategoryInitialImpl implements CategoryInitial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Category> income, List<Category> expense)
-        loaded,
+    loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -519,9 +518,10 @@ abstract class CategoryInitial implements CategoryState {
 
 /// @nodoc
 abstract class _$$CategoryLoadingImplCopyWith<$Res> {
-  factory _$$CategoryLoadingImplCopyWith(_$CategoryLoadingImpl value,
-          $Res Function(_$CategoryLoadingImpl) then) =
-      __$$CategoryLoadingImplCopyWithImpl<$Res>;
+  factory _$$CategoryLoadingImplCopyWith(
+    _$CategoryLoadingImpl value,
+    $Res Function(_$CategoryLoadingImpl) then,
+  ) = __$$CategoryLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -529,8 +529,9 @@ class __$$CategoryLoadingImplCopyWithImpl<$Res>
     extends _$CategoryStateCopyWithImpl<$Res, _$CategoryLoadingImpl>
     implements _$$CategoryLoadingImplCopyWith<$Res> {
   __$$CategoryLoadingImplCopyWithImpl(
-      _$CategoryLoadingImpl _value, $Res Function(_$CategoryLoadingImpl) _then)
-      : super(_value, _then);
+    _$CategoryLoadingImpl _value,
+    $Res Function(_$CategoryLoadingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -561,7 +562,7 @@ class _$CategoryLoadingImpl implements CategoryLoading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Category> income, List<Category> expense)
-        loaded,
+    loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -637,9 +638,10 @@ abstract class CategoryLoading implements CategoryState {
 
 /// @nodoc
 abstract class _$$CategoryLoadedImplCopyWith<$Res> {
-  factory _$$CategoryLoadedImplCopyWith(_$CategoryLoadedImpl value,
-          $Res Function(_$CategoryLoadedImpl) then) =
-      __$$CategoryLoadedImplCopyWithImpl<$Res>;
+  factory _$$CategoryLoadedImplCopyWith(
+    _$CategoryLoadedImpl value,
+    $Res Function(_$CategoryLoadedImpl) then,
+  ) = __$$CategoryLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Category> income, List<Category> expense});
 }
@@ -649,27 +651,27 @@ class __$$CategoryLoadedImplCopyWithImpl<$Res>
     extends _$CategoryStateCopyWithImpl<$Res, _$CategoryLoadedImpl>
     implements _$$CategoryLoadedImplCopyWith<$Res> {
   __$$CategoryLoadedImplCopyWithImpl(
-      _$CategoryLoadedImpl _value, $Res Function(_$CategoryLoadedImpl) _then)
-      : super(_value, _then);
+    _$CategoryLoadedImpl _value,
+    $Res Function(_$CategoryLoadedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? income = null,
-    Object? expense = null,
-  }) {
-    return _then(_$CategoryLoadedImpl(
-      null == income
-          ? _value._income
-          : income // ignore: cast_nullable_to_non_nullable
-              as List<Category>,
-      null == expense
-          ? _value._expense
-          : expense // ignore: cast_nullable_to_non_nullable
-              as List<Category>,
-    ));
+  $Res call({Object? income = null, Object? expense = null}) {
+    return _then(
+      _$CategoryLoadedImpl(
+        null == income
+            ? _value._income
+            : income // ignore: cast_nullable_to_non_nullable
+                  as List<Category>,
+        null == expense
+            ? _value._expense
+            : expense // ignore: cast_nullable_to_non_nullable
+                  as List<Category>,
+      ),
+    );
   }
 }
 
@@ -677,9 +679,10 @@ class __$$CategoryLoadedImplCopyWithImpl<$Res>
 
 class _$CategoryLoadedImpl implements CategoryLoaded {
   const _$CategoryLoadedImpl(
-      final List<Category> income, final List<Category> expense)
-      : _income = income,
-        _expense = expense;
+    final List<Category> income,
+    final List<Category> expense,
+  ) : _income = income,
+      _expense = expense;
 
   final List<Category> _income;
   @override
@@ -713,9 +716,10 @@ class _$CategoryLoadedImpl implements CategoryLoaded {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_income),
-      const DeepCollectionEquality().hash(_expense));
+    runtimeType,
+    const DeepCollectionEquality().hash(_income),
+    const DeepCollectionEquality().hash(_expense),
+  );
 
   /// Create a copy of CategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -724,7 +728,9 @@ class _$CategoryLoadedImpl implements CategoryLoaded {
   @pragma('vm:prefer-inline')
   _$$CategoryLoadedImplCopyWith<_$CategoryLoadedImpl> get copyWith =>
       __$$CategoryLoadedImplCopyWithImpl<_$CategoryLoadedImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -732,7 +738,7 @@ class _$CategoryLoadedImpl implements CategoryLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Category> income, List<Category> expense)
-        loaded,
+    loaded,
     required TResult Function(String message) error,
   }) {
     return loaded(income, expense);
@@ -804,8 +810,9 @@ class _$CategoryLoadedImpl implements CategoryLoaded {
 
 abstract class CategoryLoaded implements CategoryState {
   const factory CategoryLoaded(
-          final List<Category> income, final List<Category> expense) =
-      _$CategoryLoadedImpl;
+    final List<Category> income,
+    final List<Category> expense,
+  ) = _$CategoryLoadedImpl;
 
   List<Category> get income;
   List<Category> get expense;
@@ -820,8 +827,9 @@ abstract class CategoryLoaded implements CategoryState {
 /// @nodoc
 abstract class _$$CategoryErrorImplCopyWith<$Res> {
   factory _$$CategoryErrorImplCopyWith(
-          _$CategoryErrorImpl value, $Res Function(_$CategoryErrorImpl) then) =
-      __$$CategoryErrorImplCopyWithImpl<$Res>;
+    _$CategoryErrorImpl value,
+    $Res Function(_$CategoryErrorImpl) then,
+  ) = __$$CategoryErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
@@ -831,22 +839,23 @@ class __$$CategoryErrorImplCopyWithImpl<$Res>
     extends _$CategoryStateCopyWithImpl<$Res, _$CategoryErrorImpl>
     implements _$$CategoryErrorImplCopyWith<$Res> {
   __$$CategoryErrorImplCopyWithImpl(
-      _$CategoryErrorImpl _value, $Res Function(_$CategoryErrorImpl) _then)
-      : super(_value, _then);
+    _$CategoryErrorImpl _value,
+    $Res Function(_$CategoryErrorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoryState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$CategoryErrorImpl(
-      null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? message = null}) {
+    return _then(
+      _$CategoryErrorImpl(
+        null == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -888,7 +897,7 @@ class _$CategoryErrorImpl implements CategoryError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Category> income, List<Category> expense)
-        loaded,
+    loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);

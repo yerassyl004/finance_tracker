@@ -3,10 +3,15 @@ import 'package:finance_app/app/constant.dart';
 import 'package:finance_app/app/failure.dart';
 import 'package:finance_app/data/data_source/local/account_dao.dart';
 import 'package:finance_app/data/data_source/local/category_dao.dart';
+import 'package:finance_app/data/data_source/local/financial_analysis_dao.dart';
+import 'package:finance_app/data/data_source/local/financial_profile_dao.dart';
 import 'package:finance_app/data/data_source/local/transaction_dao.dart';
+import 'package:finance_app/data/data_source/remote/gemini_remote_data_source.dart';
 import 'package:finance_app/domain/models/account.dart';
 import 'package:finance_app/domain/models/analysis.dart';
 import 'package:finance_app/domain/models/category.dart';
+import 'package:finance_app/domain/models/financial_analysis.dart';
+import 'package:finance_app/domain/models/financial_profile.dart';
 import 'package:finance_app/domain/models/segment.dart';
 import 'package:finance_app/domain/models/transaction.dart';
 import 'package:finance_app/domain/models/type_spending.dart';
@@ -18,8 +23,23 @@ class RepositoryImpl extends Repository {
   final CategoryDao _categorytDao;
   final AccountDao _accountDao;
   final TransactionDao _transactionDao;
+  final FinancialProfileDao _financialProfileDao;
+  final GeminiRemoteDataSource _geminiRemoteDataSource;
+  final FinancialAnalysisDao _financialAnalysisDao;
 
-  RepositoryImpl(this._categorytDao, this._accountDao, this._transactionDao);
+  /// A cached analysis is refreshed after this long even if the inputs are
+  /// unchanged, so advice doesn't go stale forever. Data changes still refresh
+  /// immediately via the fingerprint.
+  static const Duration _analysisMaxAge = Duration(days: 7);
+
+  RepositoryImpl(
+    this._categorytDao,
+    this._accountDao,
+    this._transactionDao,
+    this._financialProfileDao,
+    this._geminiRemoteDataSource,
+    this._financialAnalysisDao,
+  );
 
   @override
   Future<Either<Failure, List<Account>>> loadAccountData() async {
@@ -393,6 +413,88 @@ class RepositoryImpl extends Repository {
       return Right('Transaction deleted successfully');
     } catch (e) {
       return Left(Failure(-1, e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> saveFinancialProfile(
+    FinancialProfile profile,
+  ) async {
+    try {
+      await _financialProfileDao.saveProfile(profile);
+      return Right('Financial profile saved successfully');
+    } catch (e) {
+      return Left(Failure(-1, e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FinancialProfile?>> loadFinancialProfile() async {
+    try {
+      final profile = await _financialProfileDao.getProfile();
+      return Right(profile);
+    } catch (e) {
+      return Left(Failure(-1, AppStrings.unknownError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FinancialAnalysis>> getFinancialAnalysis(
+    FinancialAnalysisArguments args,
+  ) async {
+    final fingerprint = args.fingerprint;
+
+    // Read the cache first; a matching fingerprint means the inputs are
+    // unchanged, so we can skip the Gemini call entirely (token optimisation).
+    CachedFinancialAnalysis? cached;
+    try {
+      cached = await _financialAnalysisDao.get();
+    } catch (_) {
+      cached = null;
+    }
+
+    if (!args.forceRefresh &&
+        cached != null &&
+        cached.fingerprint == fingerprint &&
+        DateTime.now().difference(cached.updatedAt) < _analysisMaxAge) {
+      return Right(cached.analysis);
+    }
+
+    try {
+      final analysis = await _geminiRemoteDataSource.getAnalysis(args);
+      try {
+        await _financialAnalysisDao.save(analysis, fingerprint);
+      } catch (_) {
+        // A failed cache write shouldn't fail the request.
+      }
+      return Right(analysis);
+    } on GeminiException catch (e) {
+      // Offline / rate-limited / etc.: fall back to any cached result (even if
+      // stale or from different inputs) rather than showing nothing.
+      if (cached != null) return Right(cached.analysis);
+      return Left(_mapGeminiError(e));
+    } catch (e) {
+      if (cached != null) return Right(cached.analysis);
+      return Left(Failure(-1, AppStrings.aiErrorUnknown));
+    }
+  }
+
+  /// Translates a low-level [GeminiException] into a user-facing [Failure],
+  /// keeping the presentation layer free of any Gemini-specific types.
+  Failure _mapGeminiError(GeminiException e) {
+    switch (e.type) {
+      case GeminiErrorType.missingApiKey:
+        return Failure(1001, AppStrings.aiErrorMissingKey);
+      case GeminiErrorType.invalidApiKey:
+        return Failure(1002, AppStrings.aiErrorInvalidKey);
+      case GeminiErrorType.offline:
+        return Failure(1003, AppStrings.aiErrorOffline);
+      case GeminiErrorType.rateLimited:
+        return Failure(429, AppStrings.aiErrorRateLimited);
+      case GeminiErrorType.badResponse:
+        return Failure(1004, AppStrings.aiErrorBadResponse);
+      case GeminiErrorType.unknown:
+        return Failure(1000, AppStrings.aiErrorUnknown);
     }
   }
 }

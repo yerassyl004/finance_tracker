@@ -12,7 +12,8 @@ part of 'accounts_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$AccountsEvent {
@@ -20,47 +21,42 @@ mixin _$AccountsEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() loadAccounts,
     required TResult Function(Account account) deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadAccounts,
     TResult? Function(Account account)? deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadAccounts,
     TResult Function(Account account)? deleteAccount,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadAccounts value) loadAccounts,
     required TResult Function(DeleteAccounts value) deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadAccounts value)? loadAccounts,
     TResult? Function(DeleteAccounts value)? deleteAccount,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadAccounts value)? loadAccounts,
     TResult Function(DeleteAccounts value)? deleteAccount,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AccountsEventCopyWith<$Res> {
   factory $AccountsEventCopyWith(
-          AccountsEvent value, $Res Function(AccountsEvent) then) =
-      _$AccountsEventCopyWithImpl<$Res, AccountsEvent>;
+    AccountsEvent value,
+    $Res Function(AccountsEvent) then,
+  ) = _$AccountsEventCopyWithImpl<$Res, AccountsEvent>;
 }
 
 /// @nodoc
@@ -80,8 +76,9 @@ class _$AccountsEventCopyWithImpl<$Res, $Val extends AccountsEvent>
 /// @nodoc
 abstract class _$$LoadAccountsImplCopyWith<$Res> {
   factory _$$LoadAccountsImplCopyWith(
-          _$LoadAccountsImpl value, $Res Function(_$LoadAccountsImpl) then) =
-      __$$LoadAccountsImplCopyWithImpl<$Res>;
+    _$LoadAccountsImpl value,
+    $Res Function(_$LoadAccountsImpl) then,
+  ) = __$$LoadAccountsImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -89,8 +86,9 @@ class __$$LoadAccountsImplCopyWithImpl<$Res>
     extends _$AccountsEventCopyWithImpl<$Res, _$LoadAccountsImpl>
     implements _$$LoadAccountsImplCopyWith<$Res> {
   __$$LoadAccountsImplCopyWithImpl(
-      _$LoadAccountsImpl _value, $Res Function(_$LoadAccountsImpl) _then)
-      : super(_value, _then);
+    _$LoadAccountsImpl _value,
+    $Res Function(_$LoadAccountsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -184,9 +182,10 @@ abstract class LoadAccounts implements AccountsEvent {
 
 /// @nodoc
 abstract class _$$DeleteAccountsImplCopyWith<$Res> {
-  factory _$$DeleteAccountsImplCopyWith(_$DeleteAccountsImpl value,
-          $Res Function(_$DeleteAccountsImpl) then) =
-      __$$DeleteAccountsImplCopyWithImpl<$Res>;
+  factory _$$DeleteAccountsImplCopyWith(
+    _$DeleteAccountsImpl value,
+    $Res Function(_$DeleteAccountsImpl) then,
+  ) = __$$DeleteAccountsImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Account account});
 }
@@ -196,22 +195,23 @@ class __$$DeleteAccountsImplCopyWithImpl<$Res>
     extends _$AccountsEventCopyWithImpl<$Res, _$DeleteAccountsImpl>
     implements _$$DeleteAccountsImplCopyWith<$Res> {
   __$$DeleteAccountsImplCopyWithImpl(
-      _$DeleteAccountsImpl _value, $Res Function(_$DeleteAccountsImpl) _then)
-      : super(_value, _then);
+    _$DeleteAccountsImpl _value,
+    $Res Function(_$DeleteAccountsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? account = null,
-  }) {
-    return _then(_$DeleteAccountsImpl(
-      null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
-    ));
+  $Res call({Object? account = null}) {
+    return _then(
+      _$DeleteAccountsImpl(
+        null == account
+            ? _value.account
+            : account // ignore: cast_nullable_to_non_nullable
+                  as Account,
+      ),
+    );
   }
 }
 
@@ -246,7 +246,9 @@ class _$DeleteAccountsImpl implements DeleteAccounts {
   @pragma('vm:prefer-inline')
   _$$DeleteAccountsImplCopyWith<_$DeleteAccountsImpl> get copyWith =>
       __$$DeleteAccountsImplCopyWithImpl<_$DeleteAccountsImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -331,16 +333,14 @@ mixin _$AccountsState {
     required TResult Function() loading,
     required TResult Function(List<Account> accounts) loaded,
     required TResult Function(String message) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Account> accounts)? loaded,
     TResult? Function(String message)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -348,24 +348,21 @@ mixin _$AccountsState {
     TResult Function(List<Account> accounts)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AccountInitial value) initial,
     required TResult Function(AccountLoading value) loading,
     required TResult Function(AccountsLoaded value) loaded,
     required TResult Function(AccountError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AccountInitial value)? initial,
     TResult? Function(AccountLoading value)? loading,
     TResult? Function(AccountsLoaded value)? loaded,
     TResult? Function(AccountError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AccountInitial value)? initial,
@@ -373,15 +370,15 @@ mixin _$AccountsState {
     TResult Function(AccountsLoaded value)? loaded,
     TResult Function(AccountError value)? error,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AccountsStateCopyWith<$Res> {
   factory $AccountsStateCopyWith(
-          AccountsState value, $Res Function(AccountsState) then) =
-      _$AccountsStateCopyWithImpl<$Res, AccountsState>;
+    AccountsState value,
+    $Res Function(AccountsState) then,
+  ) = _$AccountsStateCopyWithImpl<$Res, AccountsState>;
 }
 
 /// @nodoc
@@ -400,9 +397,10 @@ class _$AccountsStateCopyWithImpl<$Res, $Val extends AccountsState>
 
 /// @nodoc
 abstract class _$$AccountInitialImplCopyWith<$Res> {
-  factory _$$AccountInitialImplCopyWith(_$AccountInitialImpl value,
-          $Res Function(_$AccountInitialImpl) then) =
-      __$$AccountInitialImplCopyWithImpl<$Res>;
+  factory _$$AccountInitialImplCopyWith(
+    _$AccountInitialImpl value,
+    $Res Function(_$AccountInitialImpl) then,
+  ) = __$$AccountInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -410,8 +408,9 @@ class __$$AccountInitialImplCopyWithImpl<$Res>
     extends _$AccountsStateCopyWithImpl<$Res, _$AccountInitialImpl>
     implements _$$AccountInitialImplCopyWith<$Res> {
   __$$AccountInitialImplCopyWithImpl(
-      _$AccountInitialImpl _value, $Res Function(_$AccountInitialImpl) _then)
-      : super(_value, _then);
+    _$AccountInitialImpl _value,
+    $Res Function(_$AccountInitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -517,9 +516,10 @@ abstract class AccountInitial implements AccountsState {
 
 /// @nodoc
 abstract class _$$AccountLoadingImplCopyWith<$Res> {
-  factory _$$AccountLoadingImplCopyWith(_$AccountLoadingImpl value,
-          $Res Function(_$AccountLoadingImpl) then) =
-      __$$AccountLoadingImplCopyWithImpl<$Res>;
+  factory _$$AccountLoadingImplCopyWith(
+    _$AccountLoadingImpl value,
+    $Res Function(_$AccountLoadingImpl) then,
+  ) = __$$AccountLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -527,8 +527,9 @@ class __$$AccountLoadingImplCopyWithImpl<$Res>
     extends _$AccountsStateCopyWithImpl<$Res, _$AccountLoadingImpl>
     implements _$$AccountLoadingImplCopyWith<$Res> {
   __$$AccountLoadingImplCopyWithImpl(
-      _$AccountLoadingImpl _value, $Res Function(_$AccountLoadingImpl) _then)
-      : super(_value, _then);
+    _$AccountLoadingImpl _value,
+    $Res Function(_$AccountLoadingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -634,9 +635,10 @@ abstract class AccountLoading implements AccountsState {
 
 /// @nodoc
 abstract class _$$AccountsLoadedImplCopyWith<$Res> {
-  factory _$$AccountsLoadedImplCopyWith(_$AccountsLoadedImpl value,
-          $Res Function(_$AccountsLoadedImpl) then) =
-      __$$AccountsLoadedImplCopyWithImpl<$Res>;
+  factory _$$AccountsLoadedImplCopyWith(
+    _$AccountsLoadedImpl value,
+    $Res Function(_$AccountsLoadedImpl) then,
+  ) = __$$AccountsLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Account> accounts});
 }
@@ -646,22 +648,23 @@ class __$$AccountsLoadedImplCopyWithImpl<$Res>
     extends _$AccountsStateCopyWithImpl<$Res, _$AccountsLoadedImpl>
     implements _$$AccountsLoadedImplCopyWith<$Res> {
   __$$AccountsLoadedImplCopyWithImpl(
-      _$AccountsLoadedImpl _value, $Res Function(_$AccountsLoadedImpl) _then)
-      : super(_value, _then);
+    _$AccountsLoadedImpl _value,
+    $Res Function(_$AccountsLoadedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? accounts = null,
-  }) {
-    return _then(_$AccountsLoadedImpl(
-      null == accounts
-          ? _value._accounts
-          : accounts // ignore: cast_nullable_to_non_nullable
-              as List<Account>,
-    ));
+  $Res call({Object? accounts = null}) {
+    return _then(
+      _$AccountsLoadedImpl(
+        null == accounts
+            ? _value._accounts
+            : accounts // ignore: cast_nullable_to_non_nullable
+                  as List<Account>,
+      ),
+    );
   }
 }
 
@@ -669,7 +672,7 @@ class __$$AccountsLoadedImplCopyWithImpl<$Res>
 
 class _$AccountsLoadedImpl implements AccountsLoaded {
   const _$AccountsLoadedImpl(final List<Account> accounts)
-      : _accounts = accounts;
+    : _accounts = accounts;
 
   final List<Account> _accounts;
   @override
@@ -703,7 +706,9 @@ class _$AccountsLoadedImpl implements AccountsLoaded {
   @pragma('vm:prefer-inline')
   _$$AccountsLoadedImplCopyWith<_$AccountsLoadedImpl> get copyWith =>
       __$$AccountsLoadedImplCopyWithImpl<_$AccountsLoadedImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -796,8 +801,9 @@ abstract class AccountsLoaded implements AccountsState {
 /// @nodoc
 abstract class _$$AccountErrorImplCopyWith<$Res> {
   factory _$$AccountErrorImplCopyWith(
-          _$AccountErrorImpl value, $Res Function(_$AccountErrorImpl) then) =
-      __$$AccountErrorImplCopyWithImpl<$Res>;
+    _$AccountErrorImpl value,
+    $Res Function(_$AccountErrorImpl) then,
+  ) = __$$AccountErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
@@ -807,22 +813,23 @@ class __$$AccountErrorImplCopyWithImpl<$Res>
     extends _$AccountsStateCopyWithImpl<$Res, _$AccountErrorImpl>
     implements _$$AccountErrorImplCopyWith<$Res> {
   __$$AccountErrorImplCopyWithImpl(
-      _$AccountErrorImpl _value, $Res Function(_$AccountErrorImpl) _then)
-      : super(_value, _then);
+    _$AccountErrorImpl _value,
+    $Res Function(_$AccountErrorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$AccountErrorImpl(
-      null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? message = null}) {
+    return _then(
+      _$AccountErrorImpl(
+        null == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 

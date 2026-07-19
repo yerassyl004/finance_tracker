@@ -10,6 +10,8 @@ import 'package:finance_app/app/failure.dart' as _i5;
 import 'package:finance_app/domain/models/account.dart' as _i11;
 import 'package:finance_app/domain/models/analysis.dart' as _i10;
 import 'package:finance_app/domain/models/category.dart' as _i8;
+import 'package:finance_app/domain/models/financial_analysis.dart' as _i13;
+import 'package:finance_app/domain/models/financial_profile.dart' as _i12;
 import 'package:finance_app/domain/models/segment.dart' as _i9;
 import 'package:finance_app/domain/models/transaction.dart' as _i6;
 import 'package:finance_app/domain/models/type_spending.dart' as _i7;
@@ -31,13 +33,8 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeEither_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [Repository].
@@ -50,333 +47,329 @@ class MockRepository extends _i1.Mock implements _i3.Repository {
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> updateTransaction(
-          _i6.Transaction? transaction) =>
+    _i6.Transaction? transaction,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateTransaction,
-          [transaction],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #updateTransaction,
-            [transaction],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#updateTransaction, [transaction]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#updateTransaction, [transaction]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> createTransaction(
-          _i6.Transaction? transaction) =>
+    _i6.Transaction? transaction,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createTransaction,
-          [transaction],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #createTransaction,
-            [transaction],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#createTransaction, [transaction]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#createTransaction, [transaction]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> deleteTransaction(
-          _i6.Transaction? transaction) =>
+    _i6.Transaction? transaction,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteTransaction,
-          [transaction],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #deleteTransaction,
-            [transaction],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#deleteTransaction, [transaction]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#deleteTransaction, [transaction]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>> loadTransactions(
-          DateTime? selectedDate) =>
+    DateTime? selectedDate,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #loadTransactions,
-          [selectedDate],
-        ),
-        returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
-          this,
-          Invocation.method(
-            #loadTransactions,
-            [selectedDate],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
+            Invocation.method(#loadTransactions, [selectedDate]),
+            returnValue:
+                _i4.Future<
+                  _i2.Either<_i5.Failure, List<_i6.Transaction>>
+                >.value(
+                  _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
+                    this,
+                    Invocation.method(#loadTransactions, [selectedDate]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>
-      loadTransactionsBySpending(
+  loadTransactionsBySpending(
     DateTime? selectedDate,
     _i7.TypeSpending? typeSpending,
   ) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #loadTransactionsBySpending,
-              [
-                selectedDate,
-                typeSpending,
-              ],
-            ),
-            returnValue: _i4
-                .Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
-              this,
-              Invocation.method(
-                #loadTransactionsBySpending,
-                [
-                  selectedDate,
-                  typeSpending,
-                ],
-              ),
-            )),
-          ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
+      (super.noSuchMethod(
+            Invocation.method(#loadTransactionsBySpending, [
+              selectedDate,
+              typeSpending,
+            ]),
+            returnValue:
+                _i4.Future<
+                  _i2.Either<_i5.Failure, List<_i6.Transaction>>
+                >.value(
+                  _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
+                    this,
+                    Invocation.method(#loadTransactionsBySpending, [
+                      selectedDate,
+                      typeSpending,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>
-      loadTransactionsByCategory(
-    DateTime? selectedDate,
-    _i8.Category? category,
-  ) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #loadTransactionsByCategory,
-              [
-                selectedDate,
-                category,
-              ],
-            ),
-            returnValue: _i4
-                .Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
-              this,
-              Invocation.method(
-                #loadTransactionsByCategory,
-                [
-                  selectedDate,
-                  category,
-                ],
-              ),
-            )),
-          ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
+  loadTransactionsByCategory(DateTime? selectedDate, _i8.Category? category) =>
+      (super.noSuchMethod(
+            Invocation.method(#loadTransactionsByCategory, [
+              selectedDate,
+              category,
+            ]),
+            returnValue:
+                _i4.Future<
+                  _i2.Either<_i5.Failure, List<_i6.Transaction>>
+                >.value(
+                  _FakeEither_0<_i5.Failure, List<_i6.Transaction>>(
+                    this,
+                    Invocation.method(#loadTransactionsByCategory, [
+                      selectedDate,
+                      category,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Transaction>>>);
 
   @override
   _i4.Future<double> expenseAmount(List<_i6.Transaction>? transactions) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #expenseAmount,
-          [transactions],
-        ),
-        returnValue: _i4.Future<double>.value(0.0),
-      ) as _i4.Future<double>);
+            Invocation.method(#expenseAmount, [transactions]),
+            returnValue: _i4.Future<double>.value(0.0),
+          )
+          as _i4.Future<double>);
 
   @override
   _i4.Future<double> incomeAmount(List<_i6.Transaction>? transactions) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #incomeAmount,
-          [transactions],
-        ),
-        returnValue: _i4.Future<double>.value(0.0),
-      ) as _i4.Future<double>);
+            Invocation.method(#incomeAmount, [transactions]),
+            returnValue: _i4.Future<double>.value(0.0),
+          )
+          as _i4.Future<double>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i9.Segment>>> getSegmentPercentage(
-          List<_i6.Transaction>? transactions) =>
+    List<_i6.Transaction>? transactions,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getSegmentPercentage,
-          [transactions],
-        ),
-        returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i9.Segment>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i9.Segment>>(
-          this,
-          Invocation.method(
-            #getSegmentPercentage,
-            [transactions],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i9.Segment>>>);
+            Invocation.method(#getSegmentPercentage, [transactions]),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, List<_i9.Segment>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i9.Segment>>(
+                    this,
+                    Invocation.method(#getSegmentPercentage, [transactions]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i9.Segment>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i10.Analysis>>>
-      getExpensePercentItem(List<_i6.Transaction>? transactions) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getExpensePercentItem,
-              [transactions],
-            ),
+  getExpensePercentItem(List<_i6.Transaction>? transactions) =>
+      (super.noSuchMethod(
+            Invocation.method(#getExpensePercentItem, [transactions]),
             returnValue:
                 _i4.Future<_i2.Either<_i5.Failure, List<_i10.Analysis>>>.value(
-                    _FakeEither_0<_i5.Failure, List<_i10.Analysis>>(
-              this,
-              Invocation.method(
-                #getExpensePercentItem,
-                [transactions],
-              ),
-            )),
-          ) as _i4.Future<_i2.Either<_i5.Failure, List<_i10.Analysis>>>);
+                  _FakeEither_0<_i5.Failure, List<_i10.Analysis>>(
+                    this,
+                    Invocation.method(#getExpensePercentItem, [transactions]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i10.Analysis>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i11.Account>>> loadAccountData() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #loadAccountData,
-          [],
-        ),
-        returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i11.Account>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i11.Account>>(
-          this,
-          Invocation.method(
-            #loadAccountData,
-            [],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i11.Account>>>);
+            Invocation.method(#loadAccountData, []),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, List<_i11.Account>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i11.Account>>(
+                    this,
+                    Invocation.method(#loadAccountData, []),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i11.Account>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> updateAccount(
-          _i11.Account? account) =>
+    _i11.Account? account,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateAccount,
-          [account],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #updateAccount,
-            [account],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#updateAccount, [account]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#updateAccount, [account]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> createAccount(
-          _i11.Account? account) =>
+    _i11.Account? account,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createAccount,
-          [account],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #createAccount,
-            [account],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#createAccount, [account]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#createAccount, [account]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> deleteAccountData(
-          String? accountId) =>
+    String? accountId,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteAccountData,
-          [accountId],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #deleteAccountData,
-            [accountId],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#deleteAccountData, [accountId]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#deleteAccountData, [accountId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> updateCategory(
-          _i8.Category? category) =>
+    _i8.Category? category,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateCategory,
-          [category],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #updateCategory,
-            [category],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#updateCategory, [category]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#updateCategory, [category]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> createCategory(
-          _i8.Category? category) =>
+    _i8.Category? category,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createCategory,
-          [category],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #createCategory,
-            [category],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#createCategory, [category]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#createCategory, [category]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, String>> deleteCategoryData(
-          String? categoryId) =>
+    String? categoryId,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteCategoryData,
-          [categoryId],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
-            _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #deleteCategoryData,
-            [categoryId],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, String>>);
+            Invocation.method(#deleteCategoryData, [categoryId]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#deleteCategoryData, [categoryId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i8.Category>>> loadCategoryData(
-          _i8.CategoryType? type) =>
+    _i8.CategoryType? type,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #loadCategoryData,
-          [type],
-        ),
-        returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i8.Category>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i8.Category>>(
-          this,
-          Invocation.method(
-            #loadCategoryData,
-            [type],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.Category>>>);
+            Invocation.method(#loadCategoryData, [type]),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, List<_i8.Category>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i8.Category>>(
+                    this,
+                    Invocation.method(#loadCategoryData, [type]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i8.Category>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, String>> saveFinancialProfile(
+    _i12.FinancialProfile? profile,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveFinancialProfile, [profile]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#saveFinancialProfile, [profile]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i12.FinancialProfile?>>
+  loadFinancialProfile() =>
+      (super.noSuchMethod(
+            Invocation.method(#loadFinancialProfile, []),
+            returnValue:
+                _i4.Future<
+                  _i2.Either<_i5.Failure, _i12.FinancialProfile?>
+                >.value(
+                  _FakeEither_0<_i5.Failure, _i12.FinancialProfile?>(
+                    this,
+                    Invocation.method(#loadFinancialProfile, []),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i12.FinancialProfile?>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis>>
+  getFinancialAnalysis(_i13.FinancialAnalysisArguments? args) =>
+      (super.noSuchMethod(
+            Invocation.method(#getFinancialAnalysis, [args]),
+            returnValue:
+                _i4.Future<
+                  _i2.Either<_i5.Failure, _i13.FinancialAnalysis>
+                >.value(
+                  _FakeEither_0<_i5.Failure, _i13.FinancialAnalysis>(
+                    this,
+                    Invocation.method(#getFinancialAnalysis, [args]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i13.FinancialAnalysis>>);
 }

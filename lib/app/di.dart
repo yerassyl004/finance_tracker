@@ -1,5 +1,9 @@
 import 'package:finance_app/data/data_source/local/account_dao.dart';
 import 'package:finance_app/data/data_source/local/category_dao.dart';
+import 'package:finance_app/data/data_source/local/financial_analysis_dao.dart';
+import 'package:finance_app/data/data_source/local/financial_profile_dao.dart';
+import 'package:finance_app/app/services/notification_service.dart';
+import 'package:finance_app/data/data_source/remote/gemini_remote_data_source.dart';
 import 'package:finance_app/data/repository/repository_impl.dart';
 import 'package:finance_app/domain/repository/repository.dart';
 import 'package:finance_app/domain/usecases.dart/account/create_account_usecase.dart';
@@ -16,6 +20,9 @@ import 'package:finance_app/domain/usecases.dart/transactions/load_transaction_b
 import 'package:finance_app/domain/usecases.dart/transactions/load_transactions_usecase.dart';
 import 'package:finance_app/domain/usecases.dart/transactions/load_transactions_by_type_usecase.dart';
 import 'package:finance_app/domain/usecases.dart/analysis/segment_persentage_usecase.dart';
+import 'package:finance_app/domain/usecases.dart/analysis/get_financial_analysis_usecase.dart';
+import 'package:finance_app/domain/usecases.dart/financial_profile/load_financial_profile_usecase.dart';
+import 'package:finance_app/domain/usecases.dart/financial_profile/save_financial_profile_usecase.dart';
 import 'package:finance_app/domain/usecases.dart/account/update_account_usecase.dart';
 import 'package:finance_app/domain/usecases.dart/category/update_category_usecase.dart';
 import 'package:finance_app/domain/usecases.dart/transactions/update_transaction_usecase.dart';
@@ -41,47 +48,114 @@ class DI {
   /// initLocators() should be called in main
   void initLocators() {
     // Register the Repository
-    getIt.registerLazySingleton<Repository>(() => RepositoryImpl(getIt(), getIt(), getIt()));
+    getIt.registerLazySingleton<Repository>(
+      () =>
+          RepositoryImpl(getIt(), getIt(), getIt(), getIt(), getIt(), getIt()),
+    );
     // getIt.registerLazySingleton(AccountsRepository)
 
     /// Bloc registrations
-    getIt.registerLazySingleton<TransactionBloc>(() => TransactionBloc(getIt(), getIt(), getIt()));
-    getIt.registerLazySingleton<CreateTransactionBloc>(() => CreateTransactionBloc(getIt(), getIt(), getIt(), getIt(), getIt()));
-    getIt.registerLazySingleton<TransactionInfoBloc>(() => TransactionInfoBloc(getIt(), getIt()));
-    getIt.registerLazySingleton<AccountsBloc>(() => AccountsBloc(getIt(), getIt()));
-    getIt.registerLazySingleton<CategoryBloc>(() => CategoryBloc(getIt(), getIt()));
+    getIt.registerLazySingleton<TransactionBloc>(
+      () => TransactionBloc(getIt(), getIt(), getIt()),
+    );
+    getIt.registerLazySingleton<CreateTransactionBloc>(
+      () => CreateTransactionBloc(getIt(), getIt(), getIt(), getIt(), getIt()),
+    );
+    getIt.registerLazySingleton<TransactionInfoBloc>(
+      () => TransactionInfoBloc(getIt(), getIt()),
+    );
+    getIt.registerLazySingleton<AccountsBloc>(
+      () => AccountsBloc(getIt(), getIt()),
+    );
+    getIt.registerLazySingleton<CategoryBloc>(
+      () => CategoryBloc(getIt(), getIt()),
+    );
 
     /// Usecase registrations
-    
+
     getIt.registerFactory<CategoryDao>(() => CategoryDao());
     getIt.registerFactory<AccountDao>(() => AccountDao());
     getIt.registerFactory<TransactionDao>(() => TransactionDao());
+    getIt.registerFactory<FinancialProfileDao>(() => FinancialProfileDao());
+    getIt.registerFactory<FinancialAnalysisDao>(() => FinancialAnalysisDao());
+    getIt.registerLazySingleton<GeminiRemoteDataSource>(
+      () => GeminiRemoteDataSource(),
+    );
+    getIt.registerLazySingleton<NotificationService>(
+      () => NotificationService(),
+    );
 
     /// Transaction
-    getIt.registerFactory<LoadTransactionsUsecase>(() => LoadTransactionsUsecase(getIt()));
-    getIt.registerFactory<CreateTransactionUsecase>(() => CreateTransactionUsecase(getIt()));
-    getIt.registerFactory<UpdateTransactionUsecase>(() => UpdateTransactionUsecase(getIt()));
-    getIt.registerFactory<DeleteTransactionUsecase>(() => DeleteTransactionUsecase(getIt()));
-    getIt.registerFactory<IncomeCountUsecase>(() => IncomeCountUsecase(getIt()));
-    getIt.registerFactory<ExpenceCountUsecase>(() => ExpenceCountUsecase(getIt()));
-    getIt.registerFactory<LoadTransactionsByTypeUsecase>(() => LoadTransactionsByTypeUsecase(getIt()));
-    getIt.registerFactory<LoadTransactionByCategoryUsecase>(() => LoadTransactionByCategoryUsecase(getIt()));
+    getIt.registerFactory<LoadTransactionsUsecase>(
+      () => LoadTransactionsUsecase(getIt()),
+    );
+    getIt.registerFactory<CreateTransactionUsecase>(
+      () => CreateTransactionUsecase(getIt()),
+    );
+    getIt.registerFactory<UpdateTransactionUsecase>(
+      () => UpdateTransactionUsecase(getIt()),
+    );
+    getIt.registerFactory<DeleteTransactionUsecase>(
+      () => DeleteTransactionUsecase(getIt()),
+    );
+    getIt.registerFactory<IncomeCountUsecase>(
+      () => IncomeCountUsecase(getIt()),
+    );
+    getIt.registerFactory<ExpenceCountUsecase>(
+      () => ExpenceCountUsecase(getIt()),
+    );
+    getIt.registerFactory<LoadTransactionsByTypeUsecase>(
+      () => LoadTransactionsByTypeUsecase(getIt()),
+    );
+    getIt.registerFactory<LoadTransactionByCategoryUsecase>(
+      () => LoadTransactionByCategoryUsecase(getIt()),
+    );
 
     /// Account
-    getIt.registerFactory<DeleteAccountUsecase>(() => DeleteAccountUsecase(getIt()));
-    getIt.registerFactory<CreateAccountUsecase>(() => CreateAccountUsecase(getIt()));
-    getIt.registerFactory<UpdateAccountUsecase>(() => UpdateAccountUsecase(getIt()));
-    getIt.registerFactory<LoadAccountUseCase>(() => LoadAccountUseCase(getIt()));
-
+    getIt.registerFactory<DeleteAccountUsecase>(
+      () => DeleteAccountUsecase(getIt()),
+    );
+    getIt.registerFactory<CreateAccountUsecase>(
+      () => CreateAccountUsecase(getIt()),
+    );
+    getIt.registerFactory<UpdateAccountUsecase>(
+      () => UpdateAccountUsecase(getIt()),
+    );
+    getIt.registerFactory<LoadAccountUseCase>(
+      () => LoadAccountUseCase(getIt()),
+    );
 
     /// Category
-    getIt.registerFactory<CreateCategoryUsecase>(() => CreateCategoryUsecase(getIt()));
-    getIt.registerFactory<UpdateCategoryUsecase>(() => UpdateCategoryUsecase(getIt()));
-    getIt.registerFactory<LoadCategoryUsecase>(() => LoadCategoryUsecase(getIt()));
-    getIt.registerFactory<DeleteCategoryUsecase>(() => DeleteCategoryUsecase(getIt()));
+    getIt.registerFactory<CreateCategoryUsecase>(
+      () => CreateCategoryUsecase(getIt()),
+    );
+    getIt.registerFactory<UpdateCategoryUsecase>(
+      () => UpdateCategoryUsecase(getIt()),
+    );
+    getIt.registerFactory<LoadCategoryUsecase>(
+      () => LoadCategoryUsecase(getIt()),
+    );
+    getIt.registerFactory<DeleteCategoryUsecase>(
+      () => DeleteCategoryUsecase(getIt()),
+    );
 
     /// Analysis
-    getIt.registerFactory<LoadAnalysisUsecase>(() => LoadAnalysisUsecase(getIt()));
-    getIt.registerFactory<SegmentPersentageUsecase>(() => SegmentPersentageUsecase(getIt()));
+    getIt.registerFactory<LoadAnalysisUsecase>(
+      () => LoadAnalysisUsecase(getIt()),
+    );
+    getIt.registerFactory<SegmentPersentageUsecase>(
+      () => SegmentPersentageUsecase(getIt()),
+    );
+    getIt.registerFactory<GetFinancialAnalysisUseCase>(
+      () => GetFinancialAnalysisUseCase(getIt()),
+    );
+
+    /// Financial profile (onboarding survey)
+    getIt.registerFactory<SaveFinancialProfileUsecase>(
+      () => SaveFinancialProfileUsecase(getIt()),
+    );
+    getIt.registerFactory<LoadFinancialProfileUsecase>(
+      () => LoadFinancialProfileUsecase(getIt()),
+    );
   }
 }
