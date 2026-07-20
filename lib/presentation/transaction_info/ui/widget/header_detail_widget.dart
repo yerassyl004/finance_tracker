@@ -1,23 +1,24 @@
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:finance_app/app/app_router.dart';
-import 'package:finance_app/app/extensions.dart';
 import 'package:finance_app/presentation/create_transaction/ui/pages/new_create_transactions_page.dart';
 import 'package:finance_app/presentation/home/widgets/cash_transaction_widget.dart';
 import 'package:finance_app/domain/models/transaction.dart';
 import 'package:finance_app/domain/models/type_spending.dart';
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:finance_app/presentation/resourses/strings_manager.dart';
-import 'package:finance_app/presentation/resourses/styles_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class HeaderDetailWidget extends StatelessWidget {
   final Transaction transaction;
   final VoidCallback onDelete;
-  const HeaderDetailWidget(
-      {super.key, required this.transaction, required this.onDelete});
+  const HeaderDetailWidget({
+    super.key,
+    required this.transaction,
+    required this.onDelete,
+  });
 
   void _confirmDelete(BuildContext context) {
     if (Platform.isIOS) {
@@ -29,10 +30,7 @@ class HeaderDetailWidget extends StatelessWidget {
             content: Text(AppStrings.deleteSubTitle),
             actions: <Widget>[
               CupertinoDialogAction(
-                textStyle: const TextStyle(color: Colors.blueAccent),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text(AppStrings.cancel),
               ),
               CupertinoDialogAction(
@@ -53,14 +51,24 @@ class HeaderDetailWidget extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(AppStrings.confirmDelete),
-            content: Text(AppStrings.deleteSubTitle),
+            backgroundColor: HomeTokens.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(HomeTokens.radiusLg),
+            ),
+            title: Text(AppStrings.confirmDelete, style: HomeTokens.heading()),
+            content: Text(
+              AppStrings.deleteSubTitle,
+              style: HomeTokens.bodyMuted(),
+            ),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(AppStrings.cancel),
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  AppStrings.cancel,
+                  style: HomeTokens.body().copyWith(
+                    color: HomeTokens.textSecondary,
+                  ),
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -68,7 +76,13 @@ class HeaderDetailWidget extends StatelessWidget {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop(true);
                 },
-                child: Text(AppStrings.delete),
+                child: Text(
+                  AppStrings.delete,
+                  style: HomeTokens.body().copyWith(
+                    color: HomeTokens.danger,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ],
           );
@@ -77,70 +91,127 @@ class HeaderDetailWidget extends StatelessWidget {
     }
   }
 
+  Future<void> _edit(BuildContext context) async {
+    final result = await context.pushRoute(
+      NewCreateTransactionsRoute(args: CreateTransactionsArgument(transaction)),
+    );
+    if (context.mounted && result == true) {
+      context.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String? icon = transaction.typeSpending == TypeSpending.transfer
+    final isTransfer = transaction.typeSpending == TypeSpending.transfer;
+    final String? icon = isTransfer
         ? 'transfer_icon'
         : transaction.category?.icon;
-    String? title = transaction.typeSpending == TypeSpending.transfer
+    final String title = isTransfer
         ? AppStrings.transfer
-        : transaction.category?.title;
-    String date = DateFormat('dd/MM/yyyy HH:mm').format(transaction.date);
+        : (transaction.category?.title ?? '');
+    final String date = DateFormat(
+      'dd MMM yyyy · HH:mm',
+    ).format(transaction.date);
+
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            icon != null
-                ? Image.asset(
-                    'assets/images/$icon.png',
-                    height: 50.h,
-                    width: 50.w,
-                  )
-                : SizedBox(),
-            16.pw,
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title ?? '',
-                  style: AppTextStyle.body22Medium(),
-                  textAlign: TextAlign.start,
-                ),
-                Text(date, style: AppTextStyle.body14Medium()),
-              ],
+            Container(
+              width: 48,
+              height: 48,
+              padding: const EdgeInsets.all(HomeSpacing.sm),
+              decoration: BoxDecoration(
+                color: HomeTokens.background,
+                borderRadius: BorderRadius.circular(HomeTokens.radiusMd),
+                border: Border.all(color: HomeTokens.border),
+              ),
+              child: icon != null
+                  ? Image.asset(
+                      'assets/images/$icon.png',
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.receipt_long_outlined,
+                        size: 20,
+                        color: HomeTokens.textSecondary,
+                      ),
+                    )
+                  : Icon(
+                      Icons.receipt_long_outlined,
+                      size: 20,
+                      color: HomeTokens.textSecondary,
+                    ),
             ),
-            Spacer(),
-            IconButton(
-              onPressed: () {
-                _confirmDelete(context);
-              },
-              icon: Icon(CupertinoIcons.trash),
+            const SizedBox(width: HomeSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: HomeTokens.heading(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(date, style: HomeTokens.bodyMuted()),
+                ],
+              ),
             ),
-            IconButton(
-              onPressed: () async {
-                final result = await context.pushRoute(
-                    NewCreateTransactionsRoute(
-                        args: CreateTransactionsArgument(transaction)));
-                if (context.mounted && result == true) {
-                  context.pop();
-                }
-              },
-              icon: const Icon(Icons.edit),
+            _ActionButton(
+              icon: Icons.edit_outlined,
+              onTap: () => _edit(context),
+            ),
+            const SizedBox(width: HomeSpacing.sm),
+            _ActionButton(
+              icon: Icons.delete_outline_rounded,
+              danger: true,
+              onTap: () => _confirmDelete(context),
             ),
           ],
         ),
-        16.ph,
+        const SizedBox(height: HomeSpacing.lg),
         Center(
           child: CashTransactionWidget(
-              typeSpending: transaction.typeSpending,
-              cash: transaction.cash.toString(),
-              font: 28.sp),
+            typeSpending: transaction.typeSpending,
+            cash: transaction.cash.toString(),
+            font: 34,
+          ),
         ),
       ],
+    );
+  }
+}
+
+/// Ghost circular icon button used for the edit / delete actions.
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool danger;
+
+  const _ActionButton({
+    required this.icon,
+    required this.onTap,
+    this.danger = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = danger ? HomeTokens.danger : HomeTokens.textSecondary;
+    return Material(
+      color: HomeTokens.background,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 42,
+          height: 42,
+          child: Icon(icon, size: 20, color: color),
+        ),
+      ),
     );
   }
 }

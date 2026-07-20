@@ -1,17 +1,13 @@
 import 'package:finance_app/app/di.dart';
-import 'package:finance_app/app/extensions.dart';
 import 'package:finance_app/presentation/create_account/bloc/create_account_bloc.dart';
 import 'package:finance_app/presentation/create_account/di.dart';
 import 'package:finance_app/domain/models/account.dart';
 import 'package:finance_app/presentation/create_account/ui/widget/balance_field_widget.dart';
 import 'package:finance_app/presentation/create_account/ui/widget/name_field_widget.dart';
-import 'package:finance_app/presentation/resourses/color_manager.dart';
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:finance_app/presentation/resourses/strings_manager.dart';
-import 'package:finance_app/presentation/resourses/styles_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateAccountPageArguments {
   final Account? account;
@@ -25,15 +21,17 @@ class CreateAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => di.getCreateAccountBloc(args?.account)
-        ..add(CreateAccountEvent.init()),
-      child: CreateAccountPageView(),
+      create: (context) =>
+          di.getCreateAccountBloc(args?.account)
+            ..add(CreateAccountEvent.init()),
+      child: CreateAccountPageView(isEdit: args?.account != null),
     );
   }
 }
 
 class CreateAccountPageView extends StatelessWidget {
-  const CreateAccountPageView({super.key});
+  final bool isEdit;
+  const CreateAccountPageView({super.key, this.isEdit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -46,160 +44,207 @@ class CreateAccountPageView extends StatelessWidget {
           }
         },
         builder: (context, state) => state.maybeWhen(
-          orElse: () => SizedBox(),
-          show: (data) => Padding(
-            padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SafeArea(
-                    bottom: false,
-                    child: Row(
-                      children: [
-                        Text(
-                          AppStrings.addNewAccount,
-                          style: AppTextStyle.bold22(),
-                        ),
-                        Spacer(),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(CupertinoIcons.xmark),
-                        ),
-                      ],
+          orElse: () => const SizedBox.shrink(),
+          show: (data) {
+            final bloc = context.read<CreateAccountBloc>();
+            final canSave = (data.account?.title ?? '').trim().isNotEmpty;
+
+            return SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  HomeSpacing.md,
+                  HomeSpacing.sm,
+                  HomeSpacing.md,
+                  HomeSpacing.md,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const _GrabHandle(),
+                    _SheetHeader(
+                      title: isEdit ? 'Edit account' : AppStrings.addNewAccount,
                     ),
-                  ),
-                  48.ph,
-                  Row(
-                    children: [
-                      Text(
-                        AppStrings.initialAmount,
-                        style: AppTextStyle.body18Medium(),
-                      ),
-                      12.pw,
-                      Expanded(
-                        child: BalanceFieldWidget(
-                          initialValue: data.account?.cash.toString(),
-                          onChanged: (text) {
-                            context.read<CreateAccountBloc>().add(
-                              CreateAccountEvent.edit(
-                                data: data.copyWith(
-                                  account: data.account?.copyWith(
-                                    cash: double.tryParse(text) ?? 0,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                    const SizedBox(height: HomeSpacing.lg),
+
+                    _FieldLabel(AppStrings.name),
+                    const SizedBox(height: HomeSpacing.sm),
+                    NameFieldWidget(
+                      initialValue: data.account?.title,
+                      placeholder: 'e.g. Cash, Card, Savings',
+                      onChanged: (text) => bloc.add(
+                        CreateAccountEvent.edit(
+                          data: data.copyWith(
+                            account: data.account?.copyWith(title: text),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  26.ph,
-                  Row(
-                    children: [
-                      Text(
-                        AppStrings.name,
-                        style: AppTextStyle.body18Medium(),
-                      ),
-                      12.pw,
-                      Expanded(
-                        child: NameFieldWidget(
-                          initialValue: data.account?.title,
-                          onChanged: (text) {
-                            context.read<CreateAccountBloc>().add(
-                              CreateAccountEvent.edit(
-                                data: data.copyWith(
-                                  account: data.account?.copyWith(title: text),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  26.ph,
-                  Text(
-                    AppStrings.selectIcon,
-                    style: AppTextStyle.body18Medium(),
-                  ),
-                  16.ph,
-                  SizedBox(
-                    height: 80.h,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.imageAssets.length,
-                      itemBuilder: (context, index) {
-                        final isSelected = data.selectedImageIndex == index;
-                        return GestureDetector(
-                          onTap: () {
-                            context.read<CreateAccountBloc>().add(
-                              CreateAccountEvent.edit(
-                                data: data.copyWith(
-                                  account: data.account?.copyWith(
-                                    icon: data.imageAssets[index],
-                                  ),
-                                  selectedImageIndex: index,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: isSelected
-                                    ? Colors.blueAccent
-                                    : Colors.transparent,
-                                width: 3,
-                              ),
-                              borderRadius: BorderRadius.circular(16),
+                    ),
+                    const SizedBox(height: HomeSpacing.md),
+
+                    _FieldLabel(AppStrings.initialAmount),
+                    const SizedBox(height: HomeSpacing.sm),
+                    BalanceFieldWidget(
+                      initialValue: _initialAmountText(data.account),
+                      onChanged: (text) => bloc.add(
+                        CreateAccountEvent.edit(
+                          data: data.copyWith(
+                            account: data.account?.copyWith(
+                              cash: double.tryParse(text) ?? 0,
                             ),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: Colors.grey.shade100,
-                              ),
-                              child: Image.asset(
-                                'assets/images/${data.imageAssets[index]}.png',
-                                width: 50,
-                                height: 50,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: HomeSpacing.md),
+
+                    _FieldLabel(AppStrings.selectIcon),
+                    const SizedBox(height: HomeSpacing.sm),
+                    SizedBox(
+                      height: 68,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: data.imageAssets.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(width: HomeSpacing.sm),
+                        itemBuilder: (context, index) => _IconOption(
+                          asset: data.imageAssets[index],
+                          selected: data.selectedImageIndex == index,
+                          onTap: () => bloc.add(
+                            CreateAccountEvent.edit(
+                              data: data.copyWith(
+                                account: data.account?.copyWith(
+                                  icon: data.imageAssets[index],
+                                ),
+                                selectedImageIndex: index,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  26.ph,
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        context.read<CreateAccountBloc>().add(
-                          CreateAccountEvent.create(data: data),
-                        );
-                      },
-                      backgroundColor: Colors.blueAccent,
-                      child: Text(
-                        data.account == null
-                            ? AppStrings.add
-                            : AppStrings.save,
-                        style: AppTextStyle.bold16()
-                            .copyWith(color: ColorManager.white),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: HomeSpacing.xl),
+
+                    PrimaryButton(
+                      label: isEdit ? AppStrings.save : AppStrings.add,
+                      enabled: canSave,
+                      onTap: () =>
+                          bloc.add(CreateAccountEvent.create(data: data)),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Blank for a brand-new account (so the field shows its hint), the real
+  /// balance when editing.
+  String? _initialAmountText(Account? account) {
+    if (account == null) return null;
+    final cash = account.cash;
+    if (cash == 0) return null;
+    return cash == cash.roundToDouble()
+        ? cash.toStringAsFixed(0)
+        : cash.toString();
+  }
+}
+
+// =============================================================================
+// Shared sheet pieces (also used by CreateCategoryPage).
+// =============================================================================
+
+class _GrabHandle extends StatelessWidget {
+  const _GrabHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 40,
+        height: 4,
+        margin: const EdgeInsets.only(bottom: HomeSpacing.md),
+        decoration: BoxDecoration(
+          color: HomeTokens.track,
+          borderRadius: BorderRadius.circular(HomeTokens.radiusPill),
+        ),
+      ),
+    );
+  }
+}
+
+class _SheetHeader extends StatelessWidget {
+  final String title;
+  const _SheetHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Text(title, style: HomeTokens.heading())),
+        SizedBox(
+          width: 36,
+          height: 36,
+          child: Material(
+            color: HomeTokens.track,
+            shape: const CircleBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              child: const Icon(
+                Icons.close_rounded,
+                size: 18,
+                color: HomeTokens.textSecondary,
               ),
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  final String text;
+  const _FieldLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text.toUpperCase(), style: HomeTokens.label());
+  }
+}
+
+/// A selectable icon chip (accent ring when active) shared by the create forms.
+class _IconOption extends StatelessWidget {
+  final String asset;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _IconOption({
+    required this.asset,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        width: 60,
+        padding: const EdgeInsets.all(HomeSpacing.sm),
+        decoration: BoxDecoration(
+          color: selected ? HomeTokens.accentSoft : HomeTokens.background,
+          borderRadius: BorderRadius.circular(HomeTokens.radiusMd),
+          border: Border.all(
+            color: selected ? HomeTokens.accent : HomeTokens.border,
+            width: selected ? 1.5 : 1,
+          ),
+        ),
+        child: Image.asset('assets/images/$asset.png', fit: BoxFit.contain),
       ),
     );
   }

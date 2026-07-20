@@ -1,8 +1,6 @@
-import 'package:finance_app/app/extensions.dart';
 import 'package:finance_app/domain/models/account.dart';
-import 'package:finance_app/presentation/resourses/styles_manager.dart';
+import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AccountInfoWidget extends StatelessWidget {
   final Account account;
@@ -11,31 +9,41 @@ class AccountInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HomeSpacing.md),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(16),
+        color: HomeTokens.background,
+        borderRadius: BorderRadius.circular(HomeTokens.radiusMd),
+        border: Border.all(color: HomeTokens.border),
       ),
       child: Row(
         children: [
           Container(
+            width: 40,
+            height: 40,
+            padding: const EdgeInsets.all(HomeSpacing.sm),
             decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: BorderRadius.circular(6)
+              color: HomeTokens.surface,
+              borderRadius: BorderRadius.circular(HomeTokens.radiusSm),
+              border: Border.all(color: HomeTokens.border),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Image.asset(
-                'assets/images/${account.icon}.png',
-                height: 40.h,
-                width: 40.w,
+            child: Image.asset(
+              'assets/images/${account.icon}.png',
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => Icon(
+                Icons.wallet_rounded,
+                size: 18,
+                color: HomeTokens.textSecondary,
               ),
             ),
           ),
-          16.pw,
-          Text(
-            account.title,
-            style: AppTextStyle.body20Medium()
+          const SizedBox(width: HomeSpacing.md),
+          Expanded(
+            child: Text(
+              account.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: HomeTokens.body().copyWith(fontWeight: FontWeight.w600),
+            ),
           ),
         ],
       ),

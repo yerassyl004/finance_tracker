@@ -33,6 +33,7 @@ class AppStrings {
   static const String deleteSubTitle =
       'Are you sure you want to delete this transaction?';
   static const String noNoted = 'No noted';
+  static const String note = 'Note';
 
   // Onboarding
   static const String onboardingNext = 'Next';

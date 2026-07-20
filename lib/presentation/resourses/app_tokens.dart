@@ -119,6 +119,75 @@ class HomeCard extends StatelessWidget {
   }
 }
 
+/// Full-width accent primary action with disabled + loading states — the single
+/// call-to-action button shared across the create / edit forms and add actions.
+class PrimaryButton extends StatelessWidget {
+  final String label;
+  final bool enabled;
+  final bool loading;
+  final IconData? icon;
+  final VoidCallback onTap;
+
+  const PrimaryButton({
+    super.key,
+    required this.label,
+    required this.onTap,
+    this.enabled = true,
+    this.loading = false,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final active = enabled && !loading;
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 150),
+      opacity: active ? 1 : 0.55,
+      child: Material(
+        color: active ? HomeTokens.accent : HomeTokens.textTertiary,
+        elevation: active ? 2 : 0,
+        shadowColor: Colors.black26,
+        borderRadius: BorderRadius.circular(HomeTokens.radiusMd),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(HomeTokens.radiusMd),
+          onTap: active ? onTap : null,
+          child: SizedBox(
+            height: 54,
+            child: Center(
+              child: loading
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(icon, size: 20, color: HomeTokens.surface),
+                          const SizedBox(width: HomeSpacing.sm),
+                        ],
+                        Text(
+                          label,
+                          style: HomeTokens.body().copyWith(
+                            color: HomeTokens.surface,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// A single shimmering placeholder block. Uses a lightweight looping
 /// [AnimationController] — no external `shimmer` package needed.
 class Skeleton extends StatefulWidget {
