@@ -18,6 +18,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:finance_app/domain/models/type_spending.dart';
 import 'package:finance_app/domain/models/segment.dart';
 import 'package:finance_app/domain/models/transaction.dart';
+import 'package:finance_app/presentation/resourses/shared_month.dart';
 
 part 'analysis_bloc.freezed.dart';
 
@@ -165,7 +166,7 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
     emit(
       AnalysisState.loading(
         data: AnalysisData(
-          currentMonth: DateTime.now(),
+          currentMonth: SharedMonth.currentMonth,
           transactions: [],
           segments: [],
         ),
@@ -173,7 +174,7 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
     );
 
     final result = await loadTransactionsWithTypeUsecase.execute(
-      LoadTransactionsArguments(DateTime.now(), TypeSpending.expense),
+      LoadTransactionsArguments(SharedMonth.currentMonth, TypeSpending.expense),
     );
 
     await result.fold(
@@ -215,12 +216,12 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
           (analysis) => analysisList = analysis,
         );
 
-        final categoryBudgets = await _loadCategoryBudgets(DateTime.now());
+        final categoryBudgets = await _loadCategoryBudgets(SharedMonth.currentMonth);
 
         emit(
           AnalysisState.loaded(
             data: AnalysisData(
-              currentMonth: DateTime.now(),
+              currentMonth: SharedMonth.currentMonth,
               transactions: transactions,
               segments: segmentList,
               expenseAmount: expenseAmount,

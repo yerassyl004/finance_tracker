@@ -50,25 +50,24 @@ class AnalysHeaderWidget extends StatelessWidget {
         children: [
           // Month switcher.
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _NavButton(
+              _ChevronButton(
                 icon: Icons.chevron_left,
-                tooltip: 'Previous month',
                 onTap: _previousMonth,
+                semanticLabel: 'Previous month',
               ),
-              SizedBox(
-                width: 190,
+              Expanded(
                 child: Text(
                   monthYear,
                   textAlign: TextAlign.center,
                   style: AnalysisTokens.heading(),
                 ),
               ),
-              _NavButton(
+              _ChevronButton(
                 icon: Icons.chevron_right,
-                tooltip: 'Next month',
                 onTap: _nextMonth,
+                semanticLabel: 'Next month',
               ),
             ],
           ),
@@ -102,28 +101,35 @@ class AnalysHeaderWidget extends StatelessWidget {
   }
 }
 
-/// Subtle, touch-friendly circular icon button for month navigation.
-class _NavButton extends StatelessWidget {
+class _ChevronButton extends StatelessWidget {
   final IconData icon;
-  final String tooltip;
   final VoidCallback onTap;
+  final String semanticLabel;
 
-  const _NavButton({
+  const _ChevronButton({
     required this.icon,
-    required this.tooltip,
     required this.onTap,
+    required this.semanticLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onTap,
-      tooltip: tooltip,
-      iconSize: 22,
-      color: AnalysisTokens.textSecondary,
-      splashRadius: 22,
-      constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-      icon: Icon(icon),
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: SizedBox(
+        width: 48,
+        height: 48,
+        child: Material(
+          color: AnalysisTokens.track,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Icon(icon, size: 22, color: AnalysisTokens.textSecondary),
+          ),
+        ),
+      ),
     );
   }
 }

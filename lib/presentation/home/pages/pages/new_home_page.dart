@@ -8,6 +8,7 @@ import 'package:finance_app/presentation/resourses/app_tokens.dart';
 import 'package:finance_app/presentation/home/widgets/transactions_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finance_app/presentation/resourses/shared_month.dart';
 
 class NewHomePage extends StatelessWidget {
   const NewHomePage({super.key});
@@ -67,6 +68,7 @@ class _HomeViewState extends State<_HomeView> {
               : HeaderPreferred(
                   transactionsFuture: data.transactions,
                   onDateChanged: (newDate) {
+                    SharedMonth.currentMonth = newDate;
                     context.read<TransactionBloc>().add(
                       LoadTransactionItems(month: newDate),
                     );

@@ -12,6 +12,7 @@ import 'package:finance_app/presentation/analysis/ui/widgets/multi_segment_circu
 import 'package:finance_app/presentation/resourses/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finance_app/presentation/resourses/shared_month.dart';
 
 class AnalysisPage extends StatelessWidget {
   const AnalysisPage({super.key});
@@ -119,6 +120,7 @@ class _AnalysisLoadedView extends StatelessWidget {
               children: [
                 AnalysHeaderWidget(
                   onDateChanged: (date) {
+                    SharedMonth.currentMonth = date;
                     context.read<AnalysisBloc>().add(
                       AnalysisEvent.updateTransactions(
                         month: date,

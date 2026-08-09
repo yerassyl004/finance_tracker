@@ -4,6 +4,7 @@ import 'package:finance_app/domain/usecases.dart/transactions/income_count_useca
 import 'package:finance_app/domain/usecases.dart/transactions/load_transactions_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:finance_app/presentation/resourses/shared_month.dart';
 
 part 'transaction_event.dart';
 part 'transaction_state.dart';
@@ -30,7 +31,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<LoadTransactionItems>(_onLoadTransactions);
     on<UpdateTransactionItems>(_onUpdateTransactions);
 
-    add(LoadTransactionItems(month: DateTime.now()));
+    add(LoadTransactionItems(month: SharedMonth.currentMonth));
   }
 
   Future<void> _onLoadTransactions(
